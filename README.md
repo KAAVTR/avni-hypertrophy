@@ -8,11 +8,7 @@ It is a free page for one mesocycle. It is not affiliated with RP Strength, and 
 
 Open this link in Safari or Chrome:
 
-**https://kaavtr.github.io/avni-hypertrophy/**
-
-If that page is not up yet, use:
-
-**https://cdn.jsdelivr.net/gh/KAAVTR/avni-hypertrophy@main/index.html**
+**https://htmlpreview.github.io/?https://raw.githubusercontent.com/KAAVTR/avni-hypertrophy/bcb9dcd9/index.html**
 
 1. You land on the current day: **Week 3, Day 1**.
 2. Use the arrows, or tap **All weeks**, to move between weeks and days.
@@ -23,6 +19,15 @@ If that page is not up yet, use:
 Logs stay in the browser (`localStorage`). They are not uploaded.
 
 Add to Home Screen (Share → Add to Home Screen) if you want an icon. That icon keeps a **separate** log from the Safari tab, so pick one and stick with it.
+
+### Shorter link (one settings click)
+
+GitHub’s automatic publish step cannot turn Pages on for this account. To get `https://kaavtr.github.io/avni-hypertrophy/`:
+
+1. Open https://github.com/KAAVTR/avni-hypertrophy/settings/pages
+2. Under **Build and deployment**, set **Source** to **Deploy from a branch**.
+3. Branch **main**, folder **/ (root)**, then **Save**.
+4. Wait about a minute, then open https://kaavtr.github.io/avni-hypertrophy/
 
 ## Run it locally
 
@@ -45,3 +50,5 @@ Numbers on the page come from that file only.
 - Week 3 days 4–5 and all of week 4 were not programmed in the export. Those days list the same lifts and prefill the last logged weight. They are not new numbers.
 
 Reset a day from **···** if you want the export back.
+
+The public page shows the program (lift names and the weights already in the export). Sets you log stay on the phone.
