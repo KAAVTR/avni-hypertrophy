@@ -28,6 +28,10 @@
     return "./";
   }
   window.__ASSET_BASE__ = base();
+  document.querySelectorAll('link[rel="icon"], link[rel="apple-touch-icon"], link[rel="manifest"]').forEach(function (el) {
+    var href = el.getAttribute("href");
+    if (href && href.indexOf("http") !== 0) el.setAttribute("href", window.__ASSET_BASE__ + href);
+  });
   function load(path) {
     return fetch(window.__ASSET_BASE__ + path, { cache: "no-cache" }).then(function (res) {
       if (!res.ok) throw new Error("Could not load " + path + " (" + res.status + ")");
