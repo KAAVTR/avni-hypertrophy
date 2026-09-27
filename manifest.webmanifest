@@ -1,7 +1,7 @@
 {
-  "name": "Keep it goong",
-  "short_name": "Goong",
-  "description": "Personal hypertrophy workout logger. Not affiliated with RP Strength.",
+  "name": "Hypertrophy",
+  "short_name": "Hypertrophy",
+  "description": "Personal hypertrophy log. Not affiliated with RP Strength.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
