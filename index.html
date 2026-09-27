@@ -19,7 +19,6 @@
 <div id="app"><p class="boot" style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#9aa3ad;padding:48px 20px;text-align:center">Loading training history…</p></div>
 <script>
 (function () {
-  var VERSION = "1";
   function base() {
     var q = location.search.replace(/^\?/, "");
     if (q.indexOf("http") === 0) {
@@ -29,23 +28,28 @@
     return "./";
   }
   window.__ASSET_BASE__ = base();
-  function addStyle() {
-    var link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = window.__ASSET_BASE__ + "styles.css?v=" + VERSION;
-    document.head.appendChild(link);
-  }
-  function addScript(src) {
-    return new Promise(function (resolve, reject) {
-      var s = document.createElement("script");
-      s.src = window.__ASSET_BASE__ + src + "?v=" + VERSION;
-      s.onload = function () { resolve(); };
-      s.onerror = function () { reject(new Error("Could not load " + src)); };
-      document.body.appendChild(s);
+  function load(path) {
+    return fetch(window.__ASSET_BASE__ + path, { cache: "no-cache" }).then(function (res) {
+      if (!res.ok) throw new Error("Could not load " + path + " (" + res.status + ")");
+      return res.text();
     });
   }
-  addStyle();
-  addScript("logic.js").then(function () { return addScript("app.js"); }).catch(function (err) {
+  function injectScript(code) {
+    var s = document.createElement("script");
+    s.textContent = code;
+    document.body.appendChild(s);
+  }
+  load("styles.css").then(function (css) {
+    var style = document.createElement("style");
+    style.textContent = css;
+    document.head.appendChild(style);
+    return load("logic.js");
+  }).then(function (code) {
+    injectScript(code);
+    return load("app.js");
+  }).then(function (code) {
+    injectScript(code);
+  }).catch(function (err) {
     var el = document.getElementById("app");
     if (el) el.textContent = (err && err.message) ? err.message : "Could not load the log.";
   });
