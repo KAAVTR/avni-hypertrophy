@@ -43,7 +43,7 @@ async function inflate(b64) {
   var needle = "res = await fetch('program.json', { cache: 'no-cache' });\n    if (!res.ok) throw new Error('Program file missing (' + res.status + ')');\n    state.program = await res.json();";
   if (app.indexOf(needle) === -1) throw new Error("Logger file did not match.");
   var safe = prog.replace(/</g, "\\u003c");
-  var inject = "<script>window.__PROGRAM__=" + safe + ";<" + "/script>\n";
+  var inject = "<" + "script>window.__PROGRAM__=" + safe + ";<" + "/script>\n";
   var html = inject + app.replace(needle, "state.program = window.__PROGRAM__;");
   document.open();
   document.write(html);
