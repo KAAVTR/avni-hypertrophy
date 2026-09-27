@@ -202,6 +202,38 @@ label.lbl { display: block; font-size: 12px; color: var(--faint); font-weight: 7
 .check.on { background: var(--red); border-color: var(--red); color: white; }
 .check:disabled { opacity: .45; }
 .hint { color: var(--faint); font-size: 12px; margin: 4px 0 0 30px; }
+.coach {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #142033;
+  color: #e7eef8;
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 650;
+}
+.coach .k {
+  display: inline-block;
+  margin-right: 4px;
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.coach .why { color: #b7c3d1; font-weight: 500; }
+.coach.next { background: #14241c; }
+.coach.next .k { color: var(--green); }
+.coach.deload { background: #2a2416; }
+.coach.deload .k { color: var(--amber); }
+.coach.skip, .coach-banner {
+  margin: 8px 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #2a2416;
+  color: #f0d7a2;
+  font-size: 13px;
+  line-height: 1.35;
+}
 .skipped-line { color: var(--faint); font-size: 14px; padding: 8px 0 0 30px; }
 
 .seg { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }

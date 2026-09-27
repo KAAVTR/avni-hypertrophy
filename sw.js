@@ -1,9 +1,10 @@
-const CACHE = "hypertrophy-v1";
+const CACHE = "hypertrophy-v2";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./logic.js",
+  "./overload.js",
   "./app.js",
   "./manifest.webmanifest",
   "./favicon.svg",

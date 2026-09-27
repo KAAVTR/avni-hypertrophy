@@ -50,6 +50,9 @@
     return load("logic.js");
   }).then(function (code) {
     injectScript(code);
+    return load("overload.js");
+  }).then(function (code) {
+    injectScript(code);
     return load("app.js");
   }).then(function (code) {
     injectScript(code);

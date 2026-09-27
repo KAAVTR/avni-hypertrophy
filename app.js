@@ -361,7 +361,7 @@
   }
 
   function disclaimer() {
-    return '<p class="disclaimer">Personal training log for ' + esc(state.profileName) + '. Not affiliated with RP Strength. Weights and reps are from your export or what you type.</p>';
+    return '<p class="disclaimer">Personal training log for ' + esc(state.profileName) + '. Not affiliated with RP Strength. Weights and reps are from your export or what you type. Coach lines are a local estimate, not an official prescription.</p>';
   }
 
   function icon(name) {
@@ -468,7 +468,11 @@
     if (!editable) html += '<div class="lock">This mesocycle is finished. Sets are read-only.</div>';
     else if (locked) html += '<div class="lock">Deload stays locked until every earlier week is finished or skipped.</div>';
     else if (day.status === "pending" && !(day.exercises || []).some((ex) => (ex.sets || []).length)) {
-      html += '<div class="lock">Exercises are listed. Sets are not programmed yet — add a set when you train. Nothing here is a made-up target.</div>';
+      if (deload) html += '<div class="lock">These lifts were not programmed in the export. The coach line is a lighter deload estimate from week 1.</div>';
+      else html += '<div class="lock">Exercises are listed. Sets are not programmed yet — add a set when you train. Nothing here is a made-up target.</div>';
+    }
+    if (deload) {
+      html += '<div class="coach-banner" data-coach="deload-note">Deload week — lighter loads (~90% of week 1 on early days, ~50% later). Traps and forearms are optional; skip them if you want.</div>';
     }
 
     (day.exercises || []).forEach((ex) => {
@@ -504,6 +508,7 @@
       html += '<button class="iconbtn" data-action="exercise-menu" data-key="' + esc(meso.key) + '" data-week="' + day.week + '" data-day="' + day.position + '" data-ex="' + esc(ex.id) + '" aria-label="Exercise menu">···</button>';
     }
     html += "</div>";
+    html += coachBlock(meso, day, ex, unit);
     if (!(ex.sets || []).length) {
       html += '<div class="small muted" style="margin-top:8px">Exercise not programmed yet.</div>';
       if (canEdit) html += ghostRow(meso, day, ex, unit);
@@ -520,13 +525,20 @@
 
   function ghostRow(meso, day, ex, unit) {
     const last = state.lastByName[L.normName(ex.name)];
-    const weight = last ? trimNum(last.weight) : "";
+    let weight = last ? trimNum(last.weight) : "";
+    let repPlaceholder = "reps";
     let hint = "No target in the export.";
     if (last) hint = "Last logged " + trimNum(last.weight) + " " + (last.unit || unit) + " × " + last.reps + " · " + esc(last.meso);
+    const deloadRec = L.isDeloadWeek(meso, day.week) ? sessionRecommendation(meso, day, ex, unit, "today") : null;
+    if (deloadRec && deloadRec.weight != null) {
+      weight = trimNum(deloadRec.weight);
+      repPlaceholder = String(deloadRec.reps);
+      hint = "Deload estimate " + trimNum(deloadRec.weight) + " " + unit + " × " + deloadRec.reps + ". " + coachPhrase(deloadRec);
+    }
     return '<div class="set-row">' +
       '<span class="idx">1</span>' +
       '<input class="field" inputmode="decimal" data-focus="g-w-' + esc(ex.id) + '" data-ghost="weight" data-key="' + esc(meso.key) + '" data-week="' + day.week + '" data-day="' + day.position + '" data-ex="' + esc(ex.id) + '" placeholder="' + esc(unit) + '" value="' + esc(weight) + '">' +
-      '<input class="field" inputmode="numeric" data-focus="g-r-' + esc(ex.id) + '" data-ghost="reps" data-key="' + esc(meso.key) + '" data-week="' + day.week + '" data-day="' + day.position + '" data-ex="' + esc(ex.id) + '" placeholder="reps">' +
+      '<input class="field" inputmode="numeric" data-focus="g-r-' + esc(ex.id) + '" data-ghost="reps" data-key="' + esc(meso.key) + '" data-week="' + day.week + '" data-day="' + day.position + '" data-ex="' + esc(ex.id) + '" placeholder="' + esc(repPlaceholder) + '">' +
       '<button class="check" data-action="ghost-check" data-key="' + esc(meso.key) + '" data-week="' + day.week + '" data-day="' + day.position + '" data-ex="' + esc(ex.id) + '" aria-label="Log set">✓</button>' +
       '</div><div class="hint">' + hint + "</div>";
   }
@@ -554,6 +566,76 @@
     if (hint) html += '<div class="hint">' + esc(hint) + (set.setType && set.setType !== "regular" ? " · " + esc(set.setType) : "") + "</div>";
     else if (set.setType && set.setType !== "regular") html += '<div class="hint">' + esc(set.setType) + "</div>";
     return html;
+  }
+
+  function coachPhrase(rec) {
+    const O = window.Overload;
+    return O ? O.coachPhrase(rec) : "";
+  }
+
+  function sessionRecommendation(meso, day, ex, unit, kind, loggedNow) {
+    const O = window.Overload;
+    if (!O || !meso || !day) return null;
+    return recommendFor(O, meso, day, ex, unit, kind, loggedNow);
+  }
+
+  function recommendFor(O, meso, day, ex, unit, kind, loggedNow) {
+    const weekIndex = day.week;
+    const dayIndex = day.position;
+    if (weekIndex == null || dayIndex == null) return null;
+    const equip = state.equipByName[L.normName(ex.name)] || "";
+    const inc = O.equipmentIncrement(equip, unit);
+    const opts = { equipment: equip, dayIndex: dayIndex, daysPerWeek: (meso.weeks[weekIndex] && meso.weeks[weekIndex].days.length) || 1, muscleGroupId: ex.muscleGroupId };
+    if (kind === "next") {
+      const nextIndex = weekIndex + 1;
+      if (!meso.weeks[nextIndex]) return null;
+      const nextRir = L.weekRir(meso, nextIndex);
+      if (nextRir === 8) {
+        const ref = O.weekOneReference(meso, ex.name, dayIndex);
+        if (!ref.sets.length) return null;
+        opts.daysPerWeek = meso.weeks[nextIndex].days.length || opts.daysPerWeek;
+        return O.nextSessionRecommend(ref.sets, inc, 8, opts);
+      }
+      const logged = loggedNow || O.workingSets(ex.sets);
+      if (!logged.length) return null;
+      return O.nextSessionRecommend(logged, inc, nextRir, opts);
+    }
+    const rir = L.weekRir(meso, weekIndex);
+    if (rir === 8) {
+      const ref = O.weekOneReference(meso, ex.name, dayIndex);
+      if (!ref.sets.length) return null;
+      return O.nextSessionRecommend(ref.sets, inc, 8, opts);
+    }
+    const prior = O.findPriorLogged(meso, ex.name, weekIndex, dayIndex);
+    if (!prior) return null;
+    return O.nextSessionRecommend(prior.sets, inc, rir, opts);
+  }
+
+  function coachBlock(meso, day, ex, unit) {
+    const O = window.Overload;
+    if (!O) return "";
+    const lines = [];
+    if (L.isDeloadWeek(meso, day.week) && O.optionalDeloadSkip(ex.muscleGroupId)) {
+      lines.push('<div class="coach skip" data-coach="skip" data-exercise="' + esc(ex.name) + '">Optional skip — traps and forearms on deload.</div>');
+    }
+    const today = recommendFor(O, meso, day, ex, unit, "today");
+    if (today && today.weight != null) lines.push(coachLine(today.reason === "deload" ? "deload" : "today", today, unit, ex.name));
+    const logged = O.workingSets(ex.sets);
+    if (logged.length) {
+      const next = recommendFor(O, meso, day, ex, unit, "next", logged);
+      if (next && next.weight != null) lines.push(coachLine("next", next, unit, ex.name));
+    }
+    return lines.join("");
+  }
+
+  function coachLine(kind, rec, unit, name) {
+    const phrase = coachPhrase(rec);
+    const load = trimNum(rec.weight) + " " + unit + " × " + rec.reps;
+    const label = kind === "next" ? "Next week" : (kind === "deload" ? "Deload" : "Coach");
+    const cls = "coach" + (kind === "next" ? " next" : "") + (rec.reason === "deload" ? " deload" : "");
+    let extra = "";
+    if (rec.reason === "deload" && rec.sets) extra = ' <span class="why">· about ' + rec.sets + (rec.sets === 1 ? " set" : " sets") + "</span>";
+    return '<div class="' + cls + '" data-coach="' + (kind === "next" ? "next" : "today") + '" data-reason="' + esc(rec.reason) + '" data-exercise="' + esc(name) + '"><span class="k">' + label + "</span> " + esc(load) + ' <span class="why">' + esc(phrase) + "</span>" + extra + "</div>";
   }
 
   function recommendText(set, rir, unit) {
@@ -1224,7 +1306,7 @@
   }
 
   function overloadModal() {
-    return "<h2>Meso to meso overload</h2><p class=\"small\">When you copy an accumulation week, week 1 is prefilled with that week's target weights and target reps. The target icon means those numbers were already in your log. Manual slots have no target.</p><p class=\"small muted\">Later weeks say the exercise is not programmed yet. This app does not invent the next weights.</p><button class=\"btn primary\" data-action=\"close-modal\">Got it</button>";
+    return "<h2>Meso to meso overload</h2><p class=\"small\">When you copy an accumulation week, week 1 keeps that week's load and rep targets. Later weeks stay empty until you log them.</p><p class=\"small muted\">After a logged session, the coach suggests next week: a small load bump, or the same weight plus one rep when the equipment jump is too big. Deload week is lighter. Set counts are not changed from pump or soreness.</p><button class=\"btn primary\" data-action=\"close-modal\">Got it</button>";
   }
 
   function autofillModal() {
@@ -1282,7 +1364,15 @@
   function feedbackModal() {
     const loc = L.locateDay(state.mesos, state.modal.key, state.modal.week, state.modal.day);
     if (!loc) return "";
-    let html = "<h2>How did it feel?</h2><p class=\"small muted\">Saved on this workout only. It does not invent next week's weights.</p>";
+    let html = "<h2>How did it feel?</h2><p class=\"small muted\">Saved on this workout only. Pump, soreness, and workload do not change the set count — that formula is not published.</p>";
+    const O = window.Overload;
+    if (O) {
+      (loc.day.exercises || []).forEach((ex) => {
+        if (!O.workingSets(ex.sets).length) return;
+        const next = recommendFor(O, loc.meso, loc.day, ex, loc.day.unit || loc.meso.unit || "lb", "next");
+        if (next && next.weight != null) html += coachLine("next", next, loc.day.unit || loc.meso.unit || "lb", ex.name);
+      });
+    }
     (loc.day.muscleGroups || []).forEach((g, i) => {
       html += '<div class="card"><div>' + chip(g.muscleGroupId) + "</div>";
       ["pump", "soreness", "workload"].forEach((field) => {
@@ -1895,6 +1985,7 @@
       weightTargetMax: null,
       reps: values.reps,
       repsTarget: null,
+      progressiveOverload: window.Overload ? window.Overload.labelSetOverload(values.reps, null) : null,
       unit: found.meso.unit || "lb",
       status: "complete",
       createdAt: now,
@@ -1919,6 +2010,7 @@
       set.reps = Number(set.reps);
       set.status = "complete";
       set.finishedAt = new Date().toISOString();
+      if (window.Overload) set.progressiveOverload = window.Overload.labelSetOverload(set.reps, set.repsTarget);
     }
     L.refreshDayStatus(loc.day);
     persistDay(loc.meso, loc.day);

@@ -20,7 +20,7 @@ Shorter link, once GitHub Pages is turned on for this repo (`main` / root):
 
 ## What’s in it
 
-- **Today** opens the current mesocycle, Keep it goong, on the week and day that are actually up next (Week 3, Day 1 in the export).
+- **Today** opens the current mesocycle, Keep it goong, on the week and day that are actually up next (Week 3, Day 1 in the export). A coach line suggests weight and reps from the last logged session: a small load bump (about +2.3% when the plates allow), the same weight plus one rep when a dumbbell jump is too big, or a lighter deload (~90% of week 1 early in the week, ~50% later). Traps and forearms are optional on deload. After you log a set, the next week’s suggestion shows under that lift. Set counts are not changed from pump or soreness.
 - **Mesos** lists all 23 exported mesocycles. Finished ones are read-only. The current one, and any you create here, can be logged.
 - **History** lists every workout (705 in the export). Filter by status and open a day.
 - **Plan a mesocycle** copies one of your weeks, starts from your custom template “2026 Plan”, runs a lite muscle-priority builder, or starts from a blank board. Catalog names are listed without their day contents.
@@ -39,4 +39,5 @@ Open [http://127.0.0.1:43123](http://127.0.0.1:43123).
 
 ```bash
 node test/logic.test.js
+node test/overload.test.js
 ```
