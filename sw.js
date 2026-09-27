@@ -1,8 +1,12 @@
-const CACHE = 'goong-v1';
+const CACHE = 'goong-v2';
 const ASSETS = [
   './',
   './index.html',
-  './program.json',
+  './program.b64',
+  './chunks/app-0',
+  './chunks/app-1',
+  './chunks/app-2',
+  './chunks/app-3',
   './manifest.webmanifest',
   './favicon.svg',
 ];

@@ -1,1 +1,68 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e1013">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Goong">
+<title>Keep it goong</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="favicon.svg">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+  html, body { margin: 0; background: #0e1013; color: #f3f5f6; }
+  body {
+    min-height: 100dvh; display: flex; align-items: center; justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    padding: 24px; text-align: center;
+  }
+  p { color: #8d969f; font-size: 0.95rem; margin: 0; }
+</style>
+</head>
+<body>
+<p id="boot">Loading workout…</p>
+<script>
+async function inflate(b64) {
+  if (typeof DecompressionStream !== "function") {
+    throw new Error("Update Safari or Chrome, then open this page again.");
+  }
+  var clean = b64.replace(/\s+/g, "");
+  var bin = Uint8Array.from(atob(clean), function (c) { return c.charCodeAt(0); });
+  var stream = new Blob([bin]).stream().pipeThrough(new DecompressionStream("gzip"));
+  return new Response(stream).text();
+}
+(async function () {
+  var names = ["chunks/app-0", "chunks/app-1", "chunks/app-2", "chunks/app-3"];
+  var jobs = names.map(function (n) {
+    return fetch(n, { cache: "no-cache" }).then(function (r) {
+      if (!r.ok) throw new Error("Missing " + n);
+      return r.text();
+    });
+  });
+  jobs.push(fetch("program.b64", { cache: "no-cache" }).then(function (r) {
+    if (!r.ok) throw new Error("Missing program");
+    return r.text();
+  }));
+  var responses = await Promise.all(jobs);
+  var progB64 = responses.pop();
+  var prog = await inflate(progB64);
+  var app = await inflate(responses.join(""));
+  var needle = "res = await fetch('program.json', { cache: 'no-cache' });\n    if (!res.ok) throw new Error('Program file missing (' + res.status + ')');\n    state.program = await res.json();";
+  if (app.indexOf(needle) === -1) throw new Error("Logger file did not match.");
+  var safe = prog.replace(/</g, "\\u003c");
+  var inject = "<script>window.__PROGRAM__=" + safe + ";<" + "/script>\n";
+  var html = inject + app.replace(needle, "state.program = window.__PROGRAM__;");
+  document.open();
+  document.write(html);
+  document.close();
+})().catch(function (err) {
+  var el = document.getElementById("boot");
+  if (el) el.textContent = (err && err.message) ? err.message : "Could not load the logger.";
+});
+</script>
+</body>
+</html>
