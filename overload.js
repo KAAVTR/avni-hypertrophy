@@ -223,6 +223,77 @@
     return null;
   }
 
+  /* Load ↔ reps at a steady effort.
+     Public Epley: e1RM = weight * (1 + repsToFailure / 30).
+     Reps to failure ≈ reps you mean to perform + the week's target RIR
+     (RIR is how many reps you leave in the tank). Hold that e1RM fixed
+     when the working weight changes and solve for the new rep target:
+
+       k = lastWeight / newWeight
+       newReps = k * lastReps + (30 + reserve) * (k - 1)
+
+     reserve is the week's RIR when it is a real proximity-to-failure
+     number (0–3 on this account, up to 5). Export code 8 means deload,
+     not eight reps in reserve, so it is not added.
+
+     Around 5–15 reps the slope is about one rep per ~2.5% of load. That
+     matches the export's ~2.25% weekly bump (smaller than a full rep, so
+     the weekly plan holds reps) and the public double-progression rule
+     (a jump of several percent is traded for reps). A bigger drop adds
+     more than one rep. Pump, soreness, and workload do not enter this. */
+  var EPLEY_REPS = 30;
+  var REP_MIN = 1;
+  var REP_MAX = 30;
+  var MIN_WEIGHT_RATIO = 0.4;
+
+  function epleyReserve(weekRir) {
+    var r = Number(weekRir);
+    if (r === 8 || r == null || Number.isNaN(r) || r < 0) return 0;
+    if (r > 5) return 5;
+    return r;
+  }
+
+  function adjustRepsForWeight(input) {
+    input = input || {};
+    var lastWeight = Number(input.lastWeight);
+    var lastReps = Number(input.lastReps);
+    var newWeight = Number(input.newWeight);
+    var step = Number(input.equipmentStep);
+    var baseReps = Math.round(lastReps);
+    if (!(lastWeight > 0) || !(lastReps > 0)) {
+      return { reps: null, delta: 0, direction: "same", tip: "", ignored: true };
+    }
+    if (!(newWeight > 0)) {
+      return { reps: baseReps, delta: 0, direction: "same", tip: "", ignored: false };
+    }
+    /* A leading digit ("2" on the way to "200") is not a working weight.
+       40% is under the ~50% late-deload loads, so a real half-weight cut
+       still counts. This guard is for typing, not a training constant. */
+    if (newWeight < lastWeight * MIN_WEIGHT_RATIO) {
+      return { reps: null, delta: 0, direction: "same", tip: "", ignored: true };
+    }
+    if (step > 0 && Math.abs(newWeight - lastWeight) + 1e-9 < step) {
+      return { reps: baseReps, delta: 0, direction: "same", tip: "", ignored: false };
+    }
+    var reserve = epleyReserve(input.weekRir);
+    var k = lastWeight / newWeight;
+    var raw = k * lastReps + (EPLEY_REPS + reserve) * (k - 1);
+    var reps = Math.round(raw);
+    if (reps < REP_MIN) reps = REP_MIN;
+    if (reps > REP_MAX) reps = REP_MAX;
+    var delta = reps - baseReps;
+    var direction = delta > 0 ? "up" : delta < 0 ? "down" : "same";
+    var tip = direction === "up" ? "weight ↓ → reps ↑" : direction === "down" ? "weight ↑ → reps ↓" : "";
+    return {
+      reps: reps,
+      delta: delta,
+      direction: direction,
+      tip: tip,
+      ignored: false,
+      raw: Math.round(raw * 1000) / 1000
+    };
+  }
+
   function weekOneReference(meso, exerciseName, dayIndex) {
     var needle = normName(exerciseName);
     var week = meso && meso.weeks && meso.weeks[0];
@@ -258,6 +329,7 @@
     nextSessionRecommend: nextSessionRecommend,
     coachPhrase: coachPhrase,
     labelSetOverload: labelSetOverload,
+    adjustRepsForWeight: adjustRepsForWeight,
     findPriorLogged: findPriorLogged,
     weekOneReference: weekOneReference
   };

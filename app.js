@@ -553,7 +553,8 @@
     const readOnly = !canEdit || done;
     let html = '<div class="set-row">';
     html += '<span class="idx">' + (index + 1) + "</span>";
-    html += '<input class="field" inputmode="decimal" data-focus="w-' + esc(set.id) + '" data-set="' + esc(set.id) + '" data-field="weight" data-key="' + esc(meso.key) + '" placeholder="' + esc(unit) + '" value="' + esc(trimNum(set.weight)) + '"' + (readOnly ? " readonly" : "") + ">";
+    const anchorRep = anchorTargetReps(ex, set);
+    html += '<input class="field" inputmode="decimal" data-focus="w-' + esc(set.id) + '" data-set="' + esc(set.id) + '" data-field="weight" data-key="' + esc(meso.key) + '" data-anchor-weight="' + esc(trimNum(set.weight)) + '"' + (anchorRep != null ? ' data-anchor-reps="' + esc(String(anchorRep)) + '"' : "") + ' placeholder="' + esc(unit) + '" value="' + esc(trimNum(set.weight)) + '"' + (readOnly ? " readonly" : "") + ">";
     const repPh = set.repsTarget != null ? String(set.repsTarget) : "reps";
     html += '<input class="field" inputmode="numeric" data-focus="r-' + esc(set.id) + '" data-set="' + esc(set.id) + '" data-field="reps" data-key="' + esc(meso.key) + '" placeholder="' + esc(repPh) + '" value="' + esc(set.reps == null || set.reps < 0 ? "" : trimNum(set.reps)) + '"' + (readOnly ? " readonly" : "") + ">";
     if (canEdit) {
@@ -565,7 +566,14 @@
     const hint = recommendText(set, rir, unit);
     if (hint) html += '<div class="hint">' + esc(hint) + (set.setType && set.setType !== "regular" ? " · " + esc(set.setType) : "") + "</div>";
     else if (set.setType && set.setType !== "regular") html += '<div class="hint">' + esc(set.setType) + "</div>";
+    if (canEdit && !done) html += '<div class="tradeoff" data-tradeoff="' + esc(set.id) + '" hidden></div>';
     return html;
+  }
+
+  function anchorTargetReps(ex, set) {
+    if (set.repsTarget != null && set.repsTarget !== "") return Number(set.repsTarget);
+    const hit = (ex.sets || []).find((s) => s.repsTarget != null && s.repsTarget !== "");
+    return hit ? Number(hit.repsTarget) : null;
   }
 
   function coachPhrase(rec) {
@@ -1443,6 +1451,40 @@
     handle(action, btn);
   }
 
+  function applyWeightRepTradeoff(loc, set, weightInput) {
+    const O = window.Overload;
+    if (!O || !set) return;
+    const anchorW = weightInput ? Number(weightInput.dataset.anchorWeight) : NaN;
+    const anchorR = weightInput ? Number(weightInput.dataset.anchorReps) : NaN;
+    if (!(anchorW > 0) || !(anchorR > 0)) return;
+    const equip = state.equipByName[L.normName(loc.ex.name)] || "";
+    const unit = set.unit || loc.day.unit || loc.meso.unit || "lb";
+    const adj = O.adjustRepsForWeight({
+      lastWeight: anchorW,
+      lastReps: anchorR,
+      newWeight: set.weight,
+      weekRir: L.weekRir(loc.meso, loc.day.week),
+      equipmentStep: O.equipmentIncrement(equip, unit)
+    });
+    const repsInput = document.querySelector('[data-set="' + CSS.escape(String(set.id)) + '"][data-field="reps"]');
+    const tipEl = document.querySelector('[data-tradeoff="' + CSS.escape(String(set.id)) + '"]');
+    if (adj.ignored) return;
+    if (adj.reps == null) return;
+    set.repsTarget = adj.reps;
+    if (repsInput) {
+      repsInput.placeholder = String(adj.reps);
+      repsInput.classList.toggle("suggested", !!adj.tip);
+    }
+    if (!tipEl) return;
+    if (adj.tip) {
+      tipEl.hidden = false;
+      tipEl.textContent = adj.tip + " · " + adj.reps + " reps";
+    } else {
+      tipEl.hidden = true;
+      tipEl.textContent = "";
+    }
+  }
+
   function onInput(e) {
     const t = e.target;
     if (t.dataset.ui) {
@@ -1460,14 +1502,18 @@
       const prev = loc.set[t.dataset.field];
       const num = t.value === "" ? null : Number(t.value);
       loc.set[t.dataset.field] = num;
-      if (t.dataset.field === "weight" && state.overlay.settings.autoMatch && prev != null) {
-        const idx = loc.ex.sets.findIndex((s) => s.id === loc.set.id);
-        for (let i = idx + 1; i < loc.ex.sets.length; i++) {
-          const s = loc.ex.sets[i];
-          if (s.weight === prev && s.status !== "complete" && s.status !== "skipped") {
-            s.weight = num;
-            const el = document.querySelector('[data-set="' + CSS.escape(String(s.id)) + '"][data-field="weight"]');
-            if (el && document.activeElement !== el) el.value = num == null ? "" : String(num);
+      if (t.dataset.field === "weight") {
+        applyWeightRepTradeoff(loc, loc.set, t);
+        if (state.overlay.settings.autoMatch && prev != null) {
+          const idx = loc.ex.sets.findIndex((s) => s.id === loc.set.id);
+          for (let i = idx + 1; i < loc.ex.sets.length; i++) {
+            const s = loc.ex.sets[i];
+            if (s.weight === prev && s.status !== "complete" && s.status !== "skipped") {
+              s.weight = num;
+              const el = document.querySelector('[data-set="' + CSS.escape(String(s.id)) + '"][data-field="weight"]');
+              if (el && document.activeElement !== el) el.value = num == null ? "" : String(num);
+              applyWeightRepTradeoff(loc, s, el);
+            }
           }
         }
       }

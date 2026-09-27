@@ -143,6 +143,35 @@ const w1ref = Overload.weekOneReference(goong, "Barbell Squat (High Bar)", 0);
 assert.strictEqual(w1ref.weight, 205);
 assert.strictEqual(w1ref.reps, 8);
 
+/* Same effort when she changes the weight on a set. Epley + week RIR. */
+const same = Overload.adjustRepsForWeight({ lastWeight: 230, lastReps: 5, newWeight: 230, weekRir: 0, equipmentStep: 2.5 });
+assert.strictEqual(same.reps, 5);
+assert.strictEqual(same.direction, "same");
+assert.strictEqual(same.tip, "");
+
+const lighter = Overload.adjustRepsForWeight({ lastWeight: 230, lastReps: 5, newWeight: 200, weekRir: 0, equipmentStep: 2.5 });
+assert.strictEqual(lighter.reps, 10);
+assert.strictEqual(lighter.direction, "up");
+assert.strictEqual(lighter.tip, "weight ↓ → reps ↑");
+
+const heavier = Overload.adjustRepsForWeight({ lastWeight: 230, lastReps: 5, newWeight: 250, weekRir: 0, equipmentStep: 2.5 });
+assert.strictEqual(heavier.reps, 2);
+assert.strictEqual(heavier.direction, "down");
+assert.strictEqual(heavier.tip, "weight ↑ → reps ↓");
+
+const onePlate = Overload.adjustRepsForWeight({ lastWeight: 230, lastReps: 5, newWeight: 232.5, weekRir: 0, equipmentStep: 2.5 });
+assert.strictEqual(onePlate.reps, 5, "a ~1% plate step is under one rep");
+
+const back = Overload.adjustRepsForWeight({ lastWeight: 200, lastReps: lighter.reps, newWeight: 230, weekRir: 0, equipmentStep: 2.5 });
+assert.strictEqual(back.reps, 5, "the curve is invertible within rounding");
+
+const weekRir2 = Overload.adjustRepsForWeight({ lastWeight: 205, lastReps: 5, newWeight: 185, weekRir: 2, equipmentStep: 2.5 });
+assert.strictEqual(weekRir2.reps, 9);
+assert.strictEqual(weekRir2.tip, "weight ↓ → reps ↑");
+
+const typing = Overload.adjustRepsForWeight({ lastWeight: 230, lastReps: 5, newWeight: 2, weekRir: 0, equipmentStep: 2.5 });
+assert.strictEqual(typing.ignored, true);
+
 console.log("overload tests ok", {
   squat: squatW2rec.weight + "x" + squatW2rec.reps + " → " + squatW3rec.weight + "x" + squatW3rec.reps,
   flye: flyW2rec.weight + "x" + flyW2rec.reps + " → " + flyW3rec.weight + "x" + flyW3rec.reps,
