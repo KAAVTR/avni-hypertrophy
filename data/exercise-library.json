@@ -1,0 +1,2154 @@
+{
+ "source": "RP Hypertrophy /exercises page (scraped, 305 entries incl. custom ones she created e.g. 'Barbell Calve raises','Seated Calve raises','iso lateral row'); last_performed = history badge date shown in list",
+ "muscle_group_ids": {
+  "1": "Chest",
+  "2": "Back",
+  "3": "Triceps",
+  "4": "Biceps",
+  "5": "Shoulders",
+  "6": "Quads",
+  "7": "Glutes",
+  "8": "Hamstrings",
+  "9": "Calves",
+  "10": "Traps",
+  "11": "Forearms",
+  "12": "Abs"
+ },
+ "exercises": [
+  {
+   "name": "Ab Wheel",
+   "muscle": "Abs",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Arnold Press",
+   "muscle": "Shoulders",
+   "equipment": "Dumbbell",
+   "last_performed": "9/23/2026",
+   "exercise_id": 535942
+  },
+  {
+   "name": "Assisted Dip",
+   "muscle": "Triceps",
+   "equipment": "Machine Assistance",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Assisted Pullup (Normal Grip)",
+   "muscle": "Back",
+   "equipment": "Machine Assistance",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Assisted Pullup (Parallel Grip)",
+   "muscle": "Back",
+   "equipment": "Machine Assistance",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Assisted Pullup (Underhand Grip)",
+   "muscle": "Back",
+   "equipment": "Machine Assistance",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Assisted Pullup (Wide Grip)",
+   "muscle": "Back",
+   "equipment": "Machine Assistance",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Back Extension",
+   "muscle": "Back",
+   "equipment": "Bodyweight Loadable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Back Extension (Flexion)",
+   "muscle": "Back",
+   "equipment": "Bodyweight Loadable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Back Raise (45 degree)",
+   "muscle": "Hamstrings",
+   "equipment": "Bodyweight Only",
+   "last_performed": "8/6/2026",
+   "exercise_id": 186
+  },
+  {
+   "name": "Back Raise (Glute Ham Deck)",
+   "muscle": "Hamstrings",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Barbell Bent Over Row",
+   "muscle": "Back",
+   "equipment": "Barbell",
+   "last_performed": "10/5/2025",
+   "exercise_id": 34
+  },
+  {
+   "name": "Barbell Bent Over Shrug",
+   "muscle": "Traps",
+   "equipment": "Barbell",
+   "last_performed": "2/12/2026",
+   "exercise_id": 204
+  },
+  {
+   "name": "Barbell Calve raises",
+   "muscle": "Calves",
+   "equipment": "Barbell",
+   "last_performed": "9/3/2026",
+   "exercise_id": 812667
+  },
+  {
+   "name": "Barbell Curl (Narrow Grip)",
+   "muscle": "Biceps",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": 89
+  },
+  {
+   "name": "Barbell Curl (Normal Grip)",
+   "muscle": "Biceps",
+   "equipment": "Barbell",
+   "last_performed": "9/2/2026",
+   "exercise_id": 90
+  },
+  {
+   "name": "Barbell Facepull",
+   "muscle": "Shoulders",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": 122
+  },
+  {
+   "name": "Barbell Flexion Row",
+   "muscle": "Back",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": 49
+  },
+  {
+   "name": "Barbell Front Raise",
+   "muscle": "Shoulders",
+   "equipment": "Barbell",
+   "last_performed": "9/8/2025",
+   "exercise_id": 134
+  },
+  {
+   "name": "Barbell Front Raise (EZ Bar, Underhand)",
+   "muscle": "Shoulders",
+   "equipment": "Barbell",
+   "last_performed": "8/7/2026",
+   "exercise_id": 137
+  },
+  {
+   "name": "Barbell Front Raise (Overhand)",
+   "muscle": "Shoulders",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Barbell Good Morning (Cambered Bar)",
+   "muscle": "Hamstrings",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Barbell Good Morning (High Bar)",
+   "muscle": "Hamstrings",
+   "equipment": "Barbell",
+   "last_performed": "11/16/2024",
+   "exercise_id": 189
+  },
+  {
+   "name": "Barbell Good Morning (Low Bar)",
+   "muscle": "Hamstrings",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Barbell Good Morning (Safety Bar)",
+   "muscle": "Hamstrings",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Barbell Hip Thrust",
+   "muscle": "Glutes",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Barbell Overhead Triceps Extension",
+   "muscle": "Triceps",
+   "equipment": "Barbell",
+   "last_performed": "2/3/2026",
+   "exercise_id": 79
+  },
+  {
+   "name": "Barbell Overhead Triceps Extension (Seated)",
+   "muscle": "Triceps",
+   "equipment": "Barbell",
+   "last_performed": "2/26/2026",
+   "exercise_id": 84
+  },
+  {
+   "name": "Barbell Pullover",
+   "muscle": "Back",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Barbell Row to Chest",
+   "muscle": "Back",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Barbell Shoulder Press (Seated)",
+   "muscle": "Shoulders",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Barbell Shoulder Press (Standing)",
+   "muscle": "Shoulders",
+   "equipment": "Barbell",
+   "last_performed": "8/5/2026",
+   "exercise_id": 143
+  },
+  {
+   "name": "Barbell Shrug",
+   "muscle": "Traps",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Barbell Skullcrusher",
+   "muscle": "Triceps",
+   "equipment": "Barbell",
+   "last_performed": "9/4/2026",
+   "exercise_id": 70
+  },
+  {
+   "name": "Barbell Split Squat",
+   "muscle": "Quads",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Barbell Squat (Cambered Bar)",
+   "muscle": "Quads",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Barbell Squat (Close Stance, Feet Forward)",
+   "muscle": "Quads",
+   "equipment": "Barbell",
+   "last_performed": "12/24/2024",
+   "exercise_id": 157
+  },
+  {
+   "name": "Barbell Squat (High Bar)",
+   "muscle": "Quads",
+   "equipment": "Barbell",
+   "last_performed": "9/21/2026",
+   "exercise_id": 162
+  },
+  {
+   "name": "Barbell Squat (Narrow Stance)",
+   "muscle": "Quads",
+   "equipment": "Barbell",
+   "last_performed": "11/16/2024",
+   "exercise_id": 165
+  },
+  {
+   "name": "Barbell Squat (Safety Bar)",
+   "muscle": "Quads",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Barbell Squat (Sumo Stance)",
+   "muscle": "Glutes",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Barbell Standing Wrist Curl",
+   "muscle": "Forearms",
+   "equipment": "Barbell",
+   "last_performed": "1/18/2026",
+   "exercise_id": 214
+  },
+  {
+   "name": "Barbell Upright Row",
+   "muscle": "Shoulders",
+   "equipment": "Barbell",
+   "last_performed": "9/24/2026",
+   "exercise_id": 109
+  },
+  {
+   "name": "Bayesian Curl",
+   "muscle": "Biceps",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Belt Squat",
+   "muscle": "Quads",
+   "equipment": "Machine",
+   "last_performed": "1/8/2026",
+   "exercise_id": 156
+  },
+  {
+   "name": "Belt Squat (Wide Stance)",
+   "muscle": "Glutes",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Belt Squat Calves",
+   "muscle": "Calves",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Bench Press (Cambered Bar)",
+   "muscle": "Chest",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Bench Press (Close Grip)",
+   "muscle": "Triceps",
+   "equipment": "Barbell",
+   "last_performed": "8/11/2025",
+   "exercise_id": 535952
+  },
+  {
+   "name": "Bench Press (Decline)",
+   "muscle": "Chest",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Bench Press (Incline, Medium Grip)",
+   "muscle": "Chest",
+   "equipment": "Barbell",
+   "last_performed": "8/4/2026",
+   "exercise_id": 27
+  },
+  {
+   "name": "Bench Press (Incline, Narrow Grip)",
+   "muscle": "Chest",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Bench Press (Incline, Wide Grip)",
+   "muscle": "Chest",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Bench Press (Medium Grip)",
+   "muscle": "Chest",
+   "equipment": "Barbell",
+   "last_performed": "6/27/2026",
+   "exercise_id": 6
+  },
+  {
+   "name": "Bench Press (Narrow Grip)",
+   "muscle": "Chest",
+   "equipment": "Barbell",
+   "last_performed": "8/7/2025",
+   "exercise_id": 7
+  },
+  {
+   "name": "Bench Press (Wide Grip)",
+   "muscle": "Chest",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Bodyweight Squat (2/3)",
+   "muscle": "Quads",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Bulgarian Split Squat (Glute-Focused)",
+   "muscle": "Glutes",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Bulgarian Split Squat (Quad-Focused)",
+   "muscle": "Quads",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Bent Over Shrug",
+   "muscle": "Traps",
+   "equipment": "Cable",
+   "last_performed": "7/27/2026",
+   "exercise_id": 147
+  },
+  {
+   "name": "Cable Chest Press",
+   "muscle": "Chest",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Cross Body Bent Lateral Raise",
+   "muscle": "Shoulders",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Cross Body Lateral Raise",
+   "muscle": "Shoulders",
+   "equipment": "Cable",
+   "last_performed": "6/9/2026",
+   "exercise_id": 110
+  },
+  {
+   "name": "Cable Curl",
+   "muscle": "Biceps",
+   "equipment": "Cable",
+   "last_performed": "9/20/2026",
+   "exercise_id": 91
+  },
+  {
+   "name": "Cable Curl (EZ Bar)",
+   "muscle": "Biceps",
+   "equipment": "Cable",
+   "last_performed": "3/26/2026",
+   "exercise_id": 92
+  },
+  {
+   "name": "Cable Curl (EZ Bar, Wide Grip)",
+   "muscle": "Biceps",
+   "equipment": "Cable",
+   "last_performed": "3/24/2026",
+   "exercise_id": 93
+  },
+  {
+   "name": "Cable Curl (Single-Arm)",
+   "muscle": "Biceps",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Flexion Row",
+   "muscle": "Back",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Flye",
+   "muscle": "Chest",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Flye (Bent Over)",
+   "muscle": "Chest",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Flye (High)",
+   "muscle": "Chest",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Flye (Seated)",
+   "muscle": "Chest",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Flye (Underhand)",
+   "muscle": "Chest",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Front Raise (Overhand)",
+   "muscle": "Shoulders",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Front Raise (Underhand)",
+   "muscle": "Shoulders",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Hammer Curl (Rope)",
+   "muscle": "Biceps",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Kickback",
+   "muscle": "Glutes",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Lateral Raise (Single-Arm)",
+   "muscle": "Shoulders",
+   "equipment": "Cable",
+   "last_performed": "3/26/2026",
+   "exercise_id": 243
+  },
+  {
+   "name": "Cable Leaning Lateral Raise",
+   "muscle": "Shoulders",
+   "equipment": "Cable",
+   "last_performed": "1/8/2026",
+   "exercise_id": 111
+  },
+  {
+   "name": "Cable Overhead Triceps Extension",
+   "muscle": "Triceps",
+   "equipment": "Cable",
+   "last_performed": "8/6/2026",
+   "exercise_id": 80
+  },
+  {
+   "name": "Cable Overhead Triceps Extension (Rope)",
+   "muscle": "Triceps",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Pull Through",
+   "muscle": "Glutes",
+   "equipment": "Cable",
+   "last_performed": "9/14/2026",
+   "exercise_id": 174
+  },
+  {
+   "name": "Cable Pullover",
+   "muscle": "Back",
+   "equipment": "Cable",
+   "last_performed": "9/20/2026",
+   "exercise_id": 535939
+  },
+  {
+   "name": "Cable Rope Crunch",
+   "muscle": "Abs",
+   "equipment": "Cable",
+   "last_performed": "8/6/2026",
+   "exercise_id": 219
+  },
+  {
+   "name": "Cable Rope Facepull",
+   "muscle": "Shoulders",
+   "equipment": "Cable",
+   "last_performed": "11/14/2024",
+   "exercise_id": 124
+  },
+  {
+   "name": "Cable Rope Facepull (Kneeling)",
+   "muscle": "Shoulders",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Rope Twist Curl",
+   "muscle": "Biceps",
+   "equipment": "Cable",
+   "last_performed": "8/1/2026",
+   "exercise_id": 94
+  },
+  {
+   "name": "Cable Shrug",
+   "muscle": "Traps",
+   "equipment": "Cable",
+   "last_performed": "8/7/2026",
+   "exercise_id": 207
+  },
+  {
+   "name": "Cable Side Shrug",
+   "muscle": "Traps",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Single Arm Rear Delt Raise",
+   "muscle": "Shoulders",
+   "equipment": "Cable",
+   "last_performed": "4/4/2026",
+   "exercise_id": 125
+  },
+  {
+   "name": "Cable Single Arm Side Shrug",
+   "muscle": "Traps",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Tricep Kickback",
+   "muscle": "Triceps",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Triceps Pushdown (Bar)",
+   "muscle": "Triceps",
+   "equipment": "Cable",
+   "last_performed": "5/25/2026",
+   "exercise_id": 71
+  },
+  {
+   "name": "Cable Triceps Pushdown (Rope)",
+   "muscle": "Triceps",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Cable Triceps Pushdown (Single-Arm)",
+   "muscle": "Triceps",
+   "equipment": "Cable",
+   "last_performed": "11/12/2024",
+   "exercise_id": 76
+  },
+  {
+   "name": "Cable Upright Row",
+   "muscle": "Shoulders",
+   "equipment": "Cable",
+   "last_performed": "2/5/2026",
+   "exercise_id": 112
+  },
+  {
+   "name": "Cable Wrist Curl",
+   "muscle": "Forearms",
+   "equipment": "Cable",
+   "last_performed": "8/4/2026",
+   "exercise_id": 215
+  },
+  {
+   "name": "Calf Machine",
+   "muscle": "Calves",
+   "equipment": "Machine",
+   "last_performed": "9/24/2026",
+   "exercise_id": 198
+  },
+  {
+   "name": "Cambered Bar Row",
+   "muscle": "Back",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Chest Supported Row",
+   "muscle": "Back",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Concentration Curl",
+   "muscle": "Biceps",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Deadlift",
+   "muscle": "Back",
+   "equipment": "Barbell",
+   "last_performed": "8/3/2026",
+   "exercise_id": 535947
+  },
+  {
+   "name": "Deadlift (Deficit 25's)",
+   "muscle": "Glutes",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": 176
+  },
+  {
+   "name": "Deadlift (Deficit)",
+   "muscle": "Glutes",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Deadlift (Flexion)",
+   "muscle": "Back",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Deadlift (Sumo Stance)",
+   "muscle": "Glutes",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Deadlift (Sumo Stance, Deficit)",
+   "muscle": "Glutes",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Decline Dumbbell Curl",
+   "muscle": "Biceps",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dip (Chest-Focused)",
+   "muscle": "Chest",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dip (Triceps-Focused)",
+   "muscle": "Triceps",
+   "equipment": "Bodyweight Only",
+   "last_performed": "8/3/2026",
+   "exercise_id": 72
+  },
+  {
+   "name": "Dip (Weighted, Chest-Focused)",
+   "muscle": "Chest",
+   "equipment": "Bodyweight Loadable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dip (Weighted, Triceps-Focused)",
+   "muscle": "Triceps",
+   "equipment": "Bodyweight Loadable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dip Machine",
+   "muscle": "Triceps",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": 535953
+  },
+  {
+   "name": "Donkey Calf Raise",
+   "muscle": "Calves",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dual Cable Pullover",
+   "muscle": "Back",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbbell Flexion Row",
+   "muscle": "Back",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Bench Wrist Curl",
+   "muscle": "Forearms",
+   "equipment": "Dumbbell",
+   "last_performed": "1/6/2026",
+   "exercise_id": 216
+  },
+  {
+   "name": "Dumbbell Bent Lateral Raise",
+   "muscle": "Shoulders",
+   "equipment": "Dumbbell",
+   "last_performed": "1/30/2026",
+   "exercise_id": 126
+  },
+  {
+   "name": "Dumbbell Bent Over Shrug",
+   "muscle": "Traps",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Curl (2-Arm)",
+   "muscle": "Biceps",
+   "equipment": "Dumbbell",
+   "last_performed": "6/16/2026",
+   "exercise_id": 87
+  },
+  {
+   "name": "Dumbbell Curl (Alternating)",
+   "muscle": "Biceps",
+   "equipment": "Dumbbell",
+   "last_performed": "8/4/2026",
+   "exercise_id": 88
+  },
+  {
+   "name": "Dumbbell Curl (Incline)",
+   "muscle": "Biceps",
+   "equipment": "Dumbbell",
+   "last_performed": "9/26/2026",
+   "exercise_id": 104
+  },
+  {
+   "name": "Dumbbell Facepull",
+   "muscle": "Shoulders",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Facepull (Incline)",
+   "muscle": "Shoulders",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Flye (Flat)",
+   "muscle": "Chest",
+   "equipment": "Dumbbell",
+   "last_performed": "9/22/2026",
+   "exercise_id": 18
+  },
+  {
+   "name": "Dumbbell Flye (Incline)",
+   "muscle": "Chest",
+   "equipment": "Dumbbell",
+   "last_performed": "2/7/2025",
+   "exercise_id": 21
+  },
+  {
+   "name": "Dumbbell Front Raise",
+   "muscle": "Shoulders",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Front Squat",
+   "muscle": "Quads",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Hip Thrust (Single Leg)",
+   "muscle": "Glutes",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Lateral Raise",
+   "muscle": "Shoulders",
+   "equipment": "Dumbbell",
+   "last_performed": "3/2/2026",
+   "exercise_id": 113
+  },
+  {
+   "name": "Dumbbell Lateral Raise (Incline)",
+   "muscle": "Shoulders",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Lateral Raise (Seated)",
+   "muscle": "Shoulders",
+   "equipment": "Dumbbell",
+   "last_performed": "6/8/2026",
+   "exercise_id": 712802
+  },
+  {
+   "name": "Dumbbell Lateral Raise (Super ROM)",
+   "muscle": "Shoulders",
+   "equipment": "Dumbbell",
+   "last_performed": "9/22/2026",
+   "exercise_id": 119
+  },
+  {
+   "name": "Dumbbell Lateral Raise (Thumbs Down)",
+   "muscle": "Shoulders",
+   "equipment": "Dumbbell",
+   "last_performed": "1/29/2026",
+   "exercise_id": 117
+  },
+  {
+   "name": "Dumbbell Lateral Raise (Top Hold)",
+   "muscle": "Shoulders",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Leaning Shrug",
+   "muscle": "Traps",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Overhead Extension",
+   "muscle": "Triceps",
+   "equipment": "Dumbbell",
+   "last_performed": "9/26/2026",
+   "exercise_id": 535964
+  },
+  {
+   "name": "Dumbbell Overhead Extension (Single-Arm)",
+   "muscle": "Triceps",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Preacher Curl (Single-Arm)",
+   "muscle": "Biceps",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Press (Flat)",
+   "muscle": "Chest",
+   "equipment": "Dumbbell",
+   "last_performed": "9/26/2026",
+   "exercise_id": 2
+  },
+  {
+   "name": "Dumbbell Press (High Incline)",
+   "muscle": "Chest",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": 138
+  },
+  {
+   "name": "Dumbbell Press (Low Incline)",
+   "muscle": "Chest",
+   "equipment": "Dumbbell",
+   "last_performed": "3/23/2026",
+   "exercise_id": 30
+  },
+  {
+   "name": "Dumbbell Press (Medium Incline)",
+   "muscle": "Chest",
+   "equipment": "Dumbbell",
+   "last_performed": "9/22/2026",
+   "exercise_id": 25
+  },
+  {
+   "name": "Dumbbell Press Flye (Flat)",
+   "muscle": "Chest",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Press Flye (Incline)",
+   "muscle": "Chest",
+   "equipment": "Dumbbell",
+   "last_performed": "3/26/2026",
+   "exercise_id": 22
+  },
+  {
+   "name": "Dumbbell Pullover",
+   "muscle": "Back",
+   "equipment": "Dumbbell",
+   "last_performed": "5/28/2025",
+   "exercise_id": 56
+  },
+  {
+   "name": "Dumbbell Row (2-Arm)",
+   "muscle": "Back",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Row (2-Arm, Incline)",
+   "muscle": "Back",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Row (Single-Arm, Supported)",
+   "muscle": "Back",
+   "equipment": "Dumbbell",
+   "last_performed": "3/2/2026",
+   "exercise_id": 38
+  },
+  {
+   "name": "Dumbbell Row to Hips",
+   "muscle": "Back",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Shoulder Press (Seated)",
+   "muscle": "Shoulders",
+   "equipment": "Dumbbell",
+   "last_performed": "8/3/2026",
+   "exercise_id": 141
+  },
+  {
+   "name": "Dumbbell Shoulder Press (Standing)",
+   "muscle": "Shoulders",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": 144
+  },
+  {
+   "name": "Dumbbell Shrug",
+   "muscle": "Traps",
+   "equipment": "Dumbbell",
+   "last_performed": "2/1/2026",
+   "exercise_id": 212
+  },
+  {
+   "name": "Dumbbell Shrug (Seated)",
+   "muscle": "Traps",
+   "equipment": "Dumbbell",
+   "last_performed": "2/26/2026",
+   "exercise_id": 154
+  },
+  {
+   "name": "Dumbbell Skullcrusher",
+   "muscle": "Triceps",
+   "equipment": "Dumbbell",
+   "last_performed": "9/22/2026",
+   "exercise_id": 73
+  },
+  {
+   "name": "Dumbbell Spider Curl",
+   "muscle": "Biceps",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Split Squat",
+   "muscle": "Glutes",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Standing Wrist Curl",
+   "muscle": "Forearms",
+   "equipment": "Dumbbell",
+   "last_performed": "2/8/2025",
+   "exercise_id": 217
+  },
+  {
+   "name": "Dumbbell Stiff Legged Deadlift",
+   "muscle": "Hamstrings",
+   "equipment": "Dumbbell",
+   "last_performed": "2/21/2025",
+   "exercise_id": 187
+  },
+  {
+   "name": "Dumbbell Twist Curl",
+   "muscle": "Biceps",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Dumbbell Upright Row",
+   "muscle": "Shoulders",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": 114
+  },
+  {
+   "name": "EZ Bar Curl (Narrow Grip)",
+   "muscle": "Biceps",
+   "equipment": "Barbell",
+   "last_performed": "2/12/2026",
+   "exercise_id": 98
+  },
+  {
+   "name": "EZ Bar Curl (Normal Grip)",
+   "muscle": "Biceps",
+   "equipment": "Barbell",
+   "last_performed": "9/23/2026",
+   "exercise_id": 102
+  },
+  {
+   "name": "EZ Bar Curl (Wide Grip)",
+   "muscle": "Biceps",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "EZ Bar Overhead Triceps Extension",
+   "muscle": "Triceps",
+   "equipment": "Barbell",
+   "last_performed": "3/16/2026",
+   "exercise_id": 82
+  },
+  {
+   "name": "EZ Bar Overhead Triceps Extension (Seated)",
+   "muscle": "Triceps",
+   "equipment": "Barbell",
+   "last_performed": "4/30/2026",
+   "exercise_id": 85
+  },
+  {
+   "name": "EZ Bar Preacher Curl",
+   "muscle": "Biceps",
+   "equipment": "Barbell",
+   "last_performed": "8/20/2026",
+   "exercise_id": 100
+  },
+  {
+   "name": "EZ Bar Row (Underhand)",
+   "muscle": "Back",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "EZ Bar Skullcrusher",
+   "muscle": "Triceps",
+   "equipment": "Barbell",
+   "last_performed": "9/26/2026",
+   "exercise_id": 535951
+  },
+  {
+   "name": "EZ Bar Spider Curl",
+   "muscle": "Biceps",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Free Row Machine",
+   "muscle": "Back",
+   "equipment": "Machine",
+   "last_performed": "9/23/2026",
+   "exercise_id": null
+  },
+  {
+   "name": "Freemotion Curl (Facing Away)",
+   "muscle": "Biceps",
+   "equipment": "Freemotion",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Freemotion Curl (Facing Machine)",
+   "muscle": "Biceps",
+   "equipment": "Freemotion",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Freemotion Curl (Single-Arm)",
+   "muscle": "Biceps",
+   "equipment": "Freemotion",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Freemotion Rear Delt Flyes",
+   "muscle": "Shoulders",
+   "equipment": "Freemotion",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Freemotion Rear Delt Flyes (Paused)",
+   "muscle": "Shoulders",
+   "equipment": "Freemotion",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Freemotion Y-Raises",
+   "muscle": "Shoulders",
+   "equipment": "Freemotion",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Freemotion Y-Raises (Paused)",
+   "muscle": "Shoulders",
+   "equipment": "Freemotion",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Front Foot Elevated Smith Lunge",
+   "muscle": "Glutes",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Front Squat",
+   "muscle": "Quads",
+   "equipment": "Barbell",
+   "last_performed": "1/18/2026",
+   "exercise_id": 159
+  },
+  {
+   "name": "Front Squat (Cross Grip)",
+   "muscle": "Quads",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Goblet Squat",
+   "muscle": "Quads",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Grip Roller",
+   "muscle": "Forearms",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Hack Squat",
+   "muscle": "Quads",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Hammer Curl",
+   "muscle": "Biceps",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": 103
+  },
+  {
+   "name": "Hammer Machine Chest Press (Flat)",
+   "muscle": "Chest",
+   "equipment": "Machine",
+   "last_performed": "1/16/2026",
+   "exercise_id": 3
+  },
+  {
+   "name": "Hammer Machine Chest Press (Incline)",
+   "muscle": "Chest",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Hammer Machine Row (High)",
+   "muscle": "Back",
+   "equipment": "Machine",
+   "last_performed": "6/9/2026",
+   "exercise_id": 41
+  },
+  {
+   "name": "Hammer Machine Row (Low)",
+   "muscle": "Back",
+   "equipment": "Machine",
+   "last_performed": "3/17/2026",
+   "exercise_id": 42
+  },
+  {
+   "name": "Hammer Preacher Curl",
+   "muscle": "Biceps",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Hanging Knee Raise",
+   "muscle": "Abs",
+   "equipment": "Bodyweight Only",
+   "last_performed": "2/27/2026",
+   "exercise_id": 220
+  },
+  {
+   "name": "Hanging Straight Leg Raise",
+   "muscle": "Abs",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Hip Abduction Machine",
+   "muscle": "Glutes",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Hip Adduction",
+   "muscle": "Quads",
+   "equipment": "Machine",
+   "last_performed": "7/15/2026",
+   "exercise_id": 535968
+  },
+  {
+   "name": "Inverted Row",
+   "muscle": "Back",
+   "equipment": "Bodyweight Only",
+   "last_performed": "11/9/2024",
+   "exercise_id": 44
+  },
+  {
+   "name": "Inverted Skullcrusher",
+   "muscle": "Triceps",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": 74
+  },
+  {
+   "name": "Iso-Lateral D.Y Row",
+   "muscle": "Back",
+   "equipment": "Machine",
+   "last_performed": "3/24/2026",
+   "exercise_id": 740257
+  },
+  {
+   "name": "JM Press",
+   "muscle": "Triceps",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Landmine Row",
+   "muscle": "Back",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Leg Extension",
+   "muscle": "Quads",
+   "equipment": "Machine",
+   "last_performed": "9/24/2026",
+   "exercise_id": 163
+  },
+  {
+   "name": "Leg Press",
+   "muscle": "Quads",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": 164
+  },
+  {
+   "name": "Leg Press Calves",
+   "muscle": "Calves",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": 199
+  },
+  {
+   "name": "Lying Biceps Dumbbell Curl",
+   "muscle": "Biceps",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Lying Cable Curl",
+   "muscle": "Biceps",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Lying Dumbbell Curl",
+   "muscle": "Biceps",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Lying Leg Curl",
+   "muscle": "Hamstrings",
+   "equipment": "Machine",
+   "last_performed": "9/21/2026",
+   "exercise_id": 195
+  },
+  {
+   "name": "Machine Chest Press",
+   "muscle": "Chest",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Machine Chest Press (Incline)",
+   "muscle": "Chest",
+   "equipment": "Machine",
+   "last_performed": "2/13/2026",
+   "exercise_id": 26
+  },
+  {
+   "name": "Machine Chest Supported Row",
+   "muscle": "Back",
+   "equipment": "Machine",
+   "last_performed": "9/16/2026",
+   "exercise_id": 45
+  },
+  {
+   "name": "Machine Crunch",
+   "muscle": "Abs",
+   "equipment": "Machine",
+   "last_performed": "7/16/2026",
+   "exercise_id": 222
+  },
+  {
+   "name": "Machine Flye",
+   "muscle": "Chest",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Machine Glute Kickback",
+   "muscle": "Glutes",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Machine Hip Thrust",
+   "muscle": "Glutes",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Machine Lateral Raise",
+   "muscle": "Shoulders",
+   "equipment": "Machine",
+   "last_performed": "5/21/2026",
+   "exercise_id": 115
+  },
+  {
+   "name": "Machine Preacher Curl",
+   "muscle": "Biceps",
+   "equipment": "Machine",
+   "last_performed": "3/18/2026",
+   "exercise_id": 105
+  },
+  {
+   "name": "Machine Pulldown",
+   "muscle": "Back",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Machine Pullover",
+   "muscle": "Back",
+   "equipment": "Machine",
+   "last_performed": "9/26/2026",
+   "exercise_id": 57
+  },
+  {
+   "name": "Machine Reverse Flye",
+   "muscle": "Shoulders",
+   "equipment": "Machine",
+   "last_performed": "6/23/2026",
+   "exercise_id": 131
+  },
+  {
+   "name": "Machine Shoulder Press",
+   "muscle": "Shoulders",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Machine Shrug",
+   "muscle": "Traps",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Machine Triceps Extension",
+   "muscle": "Triceps",
+   "equipment": "Machine",
+   "last_performed": "4/27/2026",
+   "exercise_id": 83
+  },
+  {
+   "name": "Machine Triceps Pushdown",
+   "muscle": "Triceps",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Meadows Row",
+   "muscle": "Back",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Modified Candlestick",
+   "muscle": "Abs",
+   "equipment": "Bodyweight Only",
+   "last_performed": "11/4/2024",
+   "exercise_id": 223
+  },
+  {
+   "name": "Nordic Curl",
+   "muscle": "Hamstrings",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Pec Dec Flye",
+   "muscle": "Chest",
+   "equipment": "Machine",
+   "last_performed": "6/19/2026",
+   "exercise_id": 24
+  },
+  {
+   "name": "Pendulum Squat",
+   "muscle": "Quads",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Pulldown (Narrow Grip)",
+   "muscle": "Back",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": 58
+  },
+  {
+   "name": "Pulldown (Normal Grip)",
+   "muscle": "Back",
+   "equipment": "Cable",
+   "last_performed": "9/23/2026",
+   "exercise_id": 59
+  },
+  {
+   "name": "Pulldown (Parallel Grip)",
+   "muscle": "Back",
+   "equipment": "Cable",
+   "last_performed": "8/20/2026",
+   "exercise_id": 62
+  },
+  {
+   "name": "Pulldown (Single-Arm)",
+   "muscle": "Back",
+   "equipment": "Cable",
+   "last_performed": "9/24/2025",
+   "exercise_id": 535950
+  },
+  {
+   "name": "Pulldown (Straight Arm)",
+   "muscle": "Back",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Pulldown (Underhand Grip)",
+   "muscle": "Back",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Pulldown (Upright Torso to Abs)",
+   "muscle": "Back",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Pulldown (Wide Grip)",
+   "muscle": "Back",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Pullup (Normal Grip)",
+   "muscle": "Back",
+   "equipment": "Bodyweight Only",
+   "last_performed": "2/10/2026",
+   "exercise_id": 60
+  },
+  {
+   "name": "Pullup (Parallel Grip)",
+   "muscle": "Back",
+   "equipment": "Bodyweight Only",
+   "last_performed": "6/27/2026",
+   "exercise_id": 61
+  },
+  {
+   "name": "Pullup (Underhand Grip)",
+   "muscle": "Back",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Pullup (Weighted, Normal Grip)",
+   "muscle": "Back",
+   "equipment": "Bodyweight Loadable",
+   "last_performed": "6/9/2025",
+   "exercise_id": 232
+  },
+  {
+   "name": "Pullup (Weighted, Parallel Grip)",
+   "muscle": "Back",
+   "equipment": "Bodyweight Loadable",
+   "last_performed": "8/13/2025",
+   "exercise_id": 233
+  },
+  {
+   "name": "Pullup (Weighted, Underhand Grip)",
+   "muscle": "Back",
+   "equipment": "Bodyweight Loadable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Pullup (Weighted, Wide Grip)",
+   "muscle": "Back",
+   "equipment": "Bodyweight Loadable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Pullup (Wide Grip)",
+   "muscle": "Back",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Pushup",
+   "muscle": "Chest",
+   "equipment": "Bodyweight Only",
+   "last_performed": "1/23/2025",
+   "exercise_id": 9
+  },
+  {
+   "name": "Pushup (Deficit)",
+   "muscle": "Chest",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Pushup (Narrow Grip)",
+   "muscle": "Chest",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Pushup (Weighted, Narrow Grip)",
+   "muscle": "Chest",
+   "equipment": "Bodyweight Loadable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Pushup (Weighted, Normal Grip)",
+   "muscle": "Chest",
+   "equipment": "Bodyweight Loadable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Reaching Sit-Up",
+   "muscle": "Abs",
+   "equipment": "Bodyweight Only",
+   "last_performed": "11/14/2024",
+   "exercise_id": 224
+  },
+  {
+   "name": "Reverse Curl",
+   "muscle": "Forearms",
+   "equipment": "Barbell",
+   "last_performed": "2/26/2026",
+   "exercise_id": 535976
+  },
+  {
+   "name": "Reverse Hyper",
+   "muscle": "Glutes",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Reverse Lunge (Barbell)",
+   "muscle": "Glutes",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Reverse Lunge (Dumbbell)",
+   "muscle": "Glutes",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Rogers Good Morning",
+   "muscle": "Hamstrings",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Rogers Reverse Lunge",
+   "muscle": "Glutes",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Rogers Squat",
+   "muscle": "Quads",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Seal Row",
+   "muscle": "Back",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Seated Cable Row",
+   "muscle": "Back",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Seated Cable Row (Single-Arm)",
+   "muscle": "Back",
+   "equipment": "Cable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Seated Calve raises",
+   "muscle": "Calves",
+   "equipment": "Machine",
+   "last_performed": "1/7/2026",
+   "exercise_id": null
+  },
+  {
+   "name": "Seated Leg Curl",
+   "muscle": "Hamstrings",
+   "equipment": "Machine",
+   "last_performed": "9/24/2026",
+   "exercise_id": 196
+  },
+  {
+   "name": "Seated Leg Press",
+   "muscle": "Quads",
+   "equipment": "Machine",
+   "last_performed": "9/24/2026",
+   "exercise_id": 714873
+  },
+  {
+   "name": "Single Leg Extension",
+   "muscle": "Quads",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Single Leg Press",
+   "muscle": "Quads",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Single Leg Romanian Deadlift",
+   "muscle": "Hamstrings",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Single-Leg Leg Curl",
+   "muscle": "Hamstrings",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Sissy Squat (Machine)",
+   "muscle": "Quads",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Sissy Squat (No Machine)",
+   "muscle": "Quads",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Slant Board Sit-Up (Weighted)",
+   "muscle": "Abs",
+   "equipment": "Bodyweight Loadable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Bench Press (Medium Grip)",
+   "muscle": "Chest",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Bench Press (Narrow Grip)",
+   "muscle": "Chest",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Bench Press (Wide Grip)",
+   "muscle": "Chest",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Calves",
+   "muscle": "Calves",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Good Morning",
+   "muscle": "Hamstrings",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine JM Press",
+   "muscle": "Triceps",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Press (High Incline, Medium Grip)",
+   "muscle": "Chest",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Press (High Incline, Narrow Grip)",
+   "muscle": "Chest",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Press (High Incline, Wide Grip)",
+   "muscle": "Chest",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Press (Incline, Medium Grip)",
+   "muscle": "Chest",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Press (Incline, Wide Grip)",
+   "muscle": "Chest",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Press (Low Incline, Medium Grip)",
+   "muscle": "Chest",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Press (Low Incline, Narrow Grip)",
+   "muscle": "Chest",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Press (Low Incline, Wide Grip)",
+   "muscle": "Chest",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Press (Medium Incline, Narrow Grip)",
+   "muscle": "Chest",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Row",
+   "muscle": "Back",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Shoulder Press (Seated)",
+   "muscle": "Shoulders",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Shrug",
+   "muscle": "Traps",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Skullcrusher",
+   "muscle": "Triceps",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Split Squat",
+   "muscle": "Glutes",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Squat (Feet Forward)",
+   "muscle": "Quads",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Smith Machine Upright Row",
+   "muscle": "Shoulders",
+   "equipment": "Smith Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Stair Calves",
+   "muscle": "Calves",
+   "equipment": "Bodyweight Only",
+   "last_performed": "2/27/2026",
+   "exercise_id": 202
+  },
+  {
+   "name": "Stair Calves (Single Leg)",
+   "muscle": "Calves",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Standing Calf Raise",
+   "muscle": "Calves",
+   "equipment": "Machine",
+   "last_performed": "7/15/2026",
+   "exercise_id": 535954
+  },
+  {
+   "name": "Stiff-Legged Deadlift",
+   "muscle": "Hamstrings",
+   "equipment": "Barbell",
+   "last_performed": "6/20/2026",
+   "exercise_id": 191
+  },
+  {
+   "name": "T-Bar Row",
+   "muscle": "Back",
+   "equipment": "Machine",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Trap Bar Deadlift",
+   "muscle": "Glutes",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "V-Up (Weighted)",
+   "muscle": "Abs",
+   "equipment": "Bodyweight Loadable",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Walking Lunges (Glute-Focused, Barbell)",
+   "muscle": "Glutes",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Walking Lunges (Glute-Focused, Bodyweight)",
+   "muscle": "Glutes",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Walking Lunges (Glute-Focused, Dumbbell)",
+   "muscle": "Glutes",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Walking Lunges (Quad-Focused, Barbell)",
+   "muscle": "Quads",
+   "equipment": "Barbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Walking Lunges (Quad-Focused, Bodyweight)",
+   "muscle": "Quads",
+   "equipment": "Bodyweight Only",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "Walking Lunges (Quad-Focused, Dumbbell)",
+   "muscle": "Quads",
+   "equipment": "Dumbbell",
+   "last_performed": null,
+   "exercise_id": null
+  },
+  {
+   "name": "iso lateral row",
+   "muscle": "Back",
+   "equipment": "Machine",
+   "last_performed": "3/12/2026",
+   "exercise_id": 727960
+  }
+ ]
+}
