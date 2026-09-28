@@ -1,0 +1,620 @@
+{
+ "filters": {
+  "emphasis": [
+   "Arms & Shoulders",
+   "Back & Biceps",
+   "Chest & Back",
+   "Chest & Triceps",
+   "Glutes & Abs",
+   "Lower Body",
+   "Upper Body",
+   "Whole Body"
+  ],
+  "author": [
+   "RP Strength",
+   "Custom"
+  ],
+  "sex": [
+   "Male",
+   "Female"
+  ],
+  "workouts_per_week": [
+   2,
+   3,
+   4,
+   5,
+   6
+  ]
+ },
+ "custom_templates": [
+  {
+   "name": "2026 Plan",
+   "key": "4t3b7snwr9m5",
+   "url": "https://training.rpstrength.com/templates/4t3b7snwr9m5",
+   "author": "Custom (hers)",
+   "emphasis": "WHOLE BODY",
+   "sex": "MALE",
+   "days_per_week": 6,
+   "days": {
+    "Day 1": [
+     {
+      "position": 1,
+      "muscle": "Shoulders",
+      "exercise": "Cable Cross Body Lateral Raise"
+     },
+     {
+      "position": 2,
+      "muscle": "Shoulders",
+      "exercise": "Cable Upright Row"
+     },
+     {
+      "position": 3,
+      "muscle": "Biceps",
+      "exercise": "Barbell Curl (Normal Grip)"
+     },
+     {
+      "position": 4,
+      "muscle": "Biceps",
+      "exercise": "Dumbbell Curl (2-Arm)"
+     },
+     {
+      "position": 5,
+      "muscle": "Forearms",
+      "exercise": "Cable Wrist Curl"
+     },
+     {
+      "position": 6,
+      "muscle": "Traps",
+      "exercise": "Dumbbell Shrug (Seated)"
+     },
+     {
+      "position": 7,
+      "muscle": "Calves",
+      "exercise": "Leg Press Calves"
+     }
+    ],
+    "Day 2": [
+     {
+      "position": 1,
+      "muscle": "Shoulders",
+      "exercise": "Cable Cross Body Lateral Raise"
+     },
+     {
+      "position": 2,
+      "muscle": "Shoulders",
+      "exercise": "Dumbbell Shrug (Seated)"
+     },
+     {
+      "position": 3,
+      "muscle": "Quads",
+      "exercise": "Barbell Squat (Close Stance, Feet Forward)"
+     },
+     {
+      "position": 4,
+      "muscle": "Quads",
+      "exercise": "Leg Extension"
+     },
+     {
+      "position": 5,
+      "muscle": "Back",
+      "exercise": "Cable Pullover"
+     },
+     {
+      "position": 6,
+      "muscle": "Triceps",
+      "exercise": "Inverted Skullcrusher"
+     },
+     {
+      "position": 7,
+      "muscle": "Abs",
+      "exercise": "Cable Rope Crunch"
+     }
+    ],
+    "Day 3": [
+     {
+      "position": 1,
+      "muscle": "Biceps",
+      "exercise": "Dumbbell Curl (Alternating)"
+     },
+     {
+      "position": 2,
+      "muscle": "Biceps",
+      "exercise": "Dumbbell Curl (2-Arm)"
+     },
+     {
+      "position": 3,
+      "muscle": "Forearms",
+      "exercise": "Dumbbell Bench Wrist Curl"
+     },
+     {
+      "position": 4,
+      "muscle": "Forearms",
+      "exercise": "Cable Wrist Curl"
+     },
+     {
+      "position": 5,
+      "muscle": "Hamstrings",
+      "exercise": "Seated Leg Curl"
+     },
+     {
+      "position": 6,
+      "muscle": "Glutes",
+      "exercise": "Cable Pull Through"
+     }
+    ],
+    "Day 4": [
+     {
+      "position": 1,
+      "muscle": "Shoulders",
+      "exercise": "Cable Cross Body Lateral Raise"
+     },
+     {
+      "position": 2,
+      "muscle": "Shoulders",
+      "exercise": "Barbell Upright Row"
+     },
+     {
+      "position": 3,
+      "muscle": "Biceps",
+      "exercise": "Dumbbell Curl (Alternating)"
+     },
+     {
+      "position": 4,
+      "muscle": "Biceps",
+      "exercise": "Barbell Curl (Normal Grip)"
+     },
+     {
+      "position": 5,
+      "muscle": "Traps",
+      "exercise": "Barbell Bent Over Shrug"
+     },
+     {
+      "position": 6,
+      "muscle": "Calves",
+      "exercise": "Leg Press Calves"
+     }
+    ],
+    "Day 5": [
+     {
+      "position": 1,
+      "muscle": "Shoulders",
+      "exercise": "Cable Leaning Lateral Raise"
+     },
+     {
+      "position": 2,
+      "muscle": "Shoulders",
+      "exercise": "Dumbbell Upright Row"
+     },
+     {
+      "position": 3,
+      "muscle": "Quads",
+      "exercise": "Barbell Squat (Close Stance, Feet Forward)"
+     },
+     {
+      "position": 4,
+      "muscle": "Chest",
+      "exercise": "Machine Chest Press (Incline)"
+     },
+     {
+      "position": 5,
+      "muscle": "Back",
+      "exercise": "Pulldown (Normal Grip)"
+     },
+     {
+      "position": 6,
+      "muscle": "Abs",
+      "exercise": "Hanging Knee Raise"
+     }
+    ],
+    "Day 6": [
+     {
+      "position": 1,
+      "muscle": "Biceps",
+      "exercise": "Cable Rope Twist Curl"
+     },
+     {
+      "position": 2,
+      "muscle": "Biceps",
+      "exercise": "Cable Curl (EZ Bar)"
+     },
+     {
+      "position": 3,
+      "muscle": "Forearms",
+      "exercise": "Dumbbell Bench Wrist Curl"
+     },
+     {
+      "position": 4,
+      "muscle": "Forearms",
+      "exercise": "Cable Wrist Curl"
+     },
+     {
+      "position": 5,
+      "muscle": "Triceps",
+      "exercise": "Cable Overhead Triceps Extension"
+     }
+    ]
+   }
+  }
+ ],
+ "catalog": [
+  {
+   "name": "Aaron's Off Season Split",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "The Dutch Oak - Olympia Split",
+   "emphasis": "LOWER BODY",
+   "days_per_week": 6,
+   "sex": "MALE"
+  },
+  {
+   "name": "Coach Jorge Mass Upper Emphasis Meso",
+   "emphasis": "UPPER BODY",
+   "days_per_week": 6,
+   "sex": "MALE"
+  },
+  {
+   "name": "Elizabeth\u2019s Fit Model 1.0",
+   "emphasis": "LOWER BODY",
+   "days_per_week": 4,
+   "sex": "FEMALE"
+  },
+  {
+   "name": "Train To Look Like Alan Richton",
+   "emphasis": "UPPER BODY",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "Hypertrophy Made Simple 4x Per Week",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 4,
+   "sex": "MALE"
+  },
+  {
+   "name": "Hypertrophy Made Simple 3x Per Week",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 3,
+   "sex": "MALE"
+  },
+  {
+   "name": "Women's Weight Training Made Simple: 5X Program",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 5,
+   "sex": "FEMALE"
+  },
+  {
+   "name": "Women's Weight Training Made Simple: 3X Program",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 3,
+   "sex": "FEMALE"
+  },
+  {
+   "name": "B.Rexx Blueprint",
+   "emphasis": "LOWER BODY",
+   "days_per_week": 4,
+   "sex": "FEMALE"
+  },
+  {
+   "name": "3 Day Delt Annihilation",
+   "emphasis": "ARMS & SHOULDERS",
+   "days_per_week": 3,
+   "sex": "MALE"
+  },
+  {
+   "name": "Bench Press Rep Max Plan",
+   "emphasis": "UPPER BODY",
+   "days_per_week": 3,
+   "sex": "MALE"
+  },
+  {
+   "name": "Janine's Pro Debut Prep",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 4,
+   "sex": "FEMALE"
+  },
+  {
+   "name": "Janine's Pro Card Prep",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 5,
+   "sex": "FEMALE"
+  },
+  {
+   "name": "20 Minute Full Body Gym Workout",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 2,
+   "sex": "FEMALE"
+  },
+  {
+   "name": "20 Minute Full Body Dumbbell Workout",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 2,
+   "sex": "MALE"
+  },
+  {
+   "name": "20 Minute Full Body Barbell Workout",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 2,
+   "sex": "FEMALE"
+  },
+  {
+   "name": "Coach Jorge Brite's Time Saver Hypertrophy",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "Glutes Glutes Glutes by Aaron Burke",
+   "emphasis": "LOWER BODY",
+   "days_per_week": 5,
+   "sex": "FEMALE"
+  },
+  {
+   "name": "IFBB PRO Jared Feather's Back and Arm Emphasis Training Plan",
+   "emphasis": "BACK & BICEPS",
+   "days_per_week": 6,
+   "sex": "MALE"
+  },
+  {
+   "name": "Jacob Robichaux's Lower Body Emphasis",
+   "emphasis": "LOWER BODY",
+   "days_per_week": 4,
+   "sex": "MALE"
+  },
+  {
+   "name": "Chazz's Foundation Program",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 4,
+   "sex": "MALE"
+  },
+  {
+   "name": "Aaron's 5 Day Chest + Back (Thick Boy Split)",
+   "emphasis": "CHEST & BACK",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "Chris Massaro's Spring Split",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "6 Day Delt/Bicep One-A-Day Template",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 6,
+   "sex": "MALE"
+  },
+  {
+   "name": "Alex Summer Shred",
+   "emphasis": "UPPER BODY",
+   "days_per_week": 6,
+   "sex": "MALE"
+  },
+  {
+   "name": "6-Week Summer Shred",
+   "emphasis": "UPPER BODY",
+   "days_per_week": 6,
+   "sex": "MALE"
+  },
+  {
+   "name": "Kim Angel 6-day - High Intensity - Medium Volume",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 6,
+   "sex": "MALE"
+  },
+  {
+   "name": "Coach Jorge Advanced Hypertrophy Model",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 6,
+   "sex": "MALE"
+  },
+  {
+   "name": "Firefighter Dan's Upper Body Emphasis",
+   "emphasis": "UPPER BODY",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "Gerald Ernat's Army Fitness Test+ Plan",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 3,
+   "sex": "MALE"
+  },
+  {
+   "name": "Gerald Ernat's Triple Threat Protocol",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 4,
+   "sex": "MALE"
+  },
+  {
+   "name": "Get Photoshoot Ready 2026",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 6,
+   "sex": "MALE"
+  },
+  {
+   "name": "Hybrid Dad 4 Day Split",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 4,
+   "sex": "MALE"
+  },
+  {
+   "name": "Kim Angel Low Volume Arnold Classic",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "Regan Grimes Training Plan 2026",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "Lauralie Chapados - Project DB 2026",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 5,
+   "sex": "FEMALE"
+  },
+  {
+   "name": "2026 Plan",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 6,
+   "sex": "MALE"
+  },
+  {
+   "name": "Drop-In Arm Specialization",
+   "emphasis": "ARMS & SHOULDERS",
+   "days_per_week": 4,
+   "sex": "MALE"
+  },
+  {
+   "name": "Mike's 2025 Transformation",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 6,
+   "sex": "MALE"
+  },
+  {
+   "name": "Jasmine Shier's Pro Figure Refine",
+   "emphasis": "UPPER BODY",
+   "days_per_week": 5,
+   "sex": "FEMALE"
+  },
+  {
+   "name": "Casey Kelly All Levels of Natty Training Video",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 3,
+   "sex": "MALE"
+  },
+  {
+   "name": "Casey Kelly's Ultimate Optimal Program",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "Mr. Nick Shaw's Favorite",
+   "emphasis": "ARMS & SHOULDERS",
+   "days_per_week": 6,
+   "sex": "MALE"
+  },
+  {
+   "name": "Big Arms Now",
+   "emphasis": "ARMS & SHOULDERS",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "The Black Adam Workout",
+   "emphasis": "CHEST & BACK",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "4x Weekly Time Saver",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 4,
+   "sex": "MALE"
+  },
+  {
+   "name": "4x Weekly BJJ Lifting Template",
+   "emphasis": "UPPER BODY",
+   "days_per_week": 4,
+   "sex": "MALE"
+  },
+  {
+   "name": "3x Weekly BJJ Lifting Template",
+   "emphasis": "UPPER BODY",
+   "days_per_week": 3,
+   "sex": "MALE"
+  },
+  {
+   "name": "2x Weekly BJJ Lifting Template",
+   "emphasis": "UPPER BODY",
+   "days_per_week": 2,
+   "sex": "MALE"
+  },
+  {
+   "name": "Superman Workout",
+   "emphasis": "UPPER BODY",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "Thor Workout",
+   "emphasis": "UPPER BODY",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "Jared Feather's Favorite",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 6,
+   "sex": "MALE"
+  },
+  {
+   "name": "Dr. Mike's Favorite",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 6,
+   "sex": "MALE"
+  },
+  {
+   "name": "Glutes & Abs Emphasis",
+   "emphasis": "GLUTES & ABS",
+   "days_per_week": 4,
+   "sex": "MALE"
+  },
+  {
+   "name": "Chest & Triceps Emphasis",
+   "emphasis": "CHEST & TRICEPS",
+   "days_per_week": 4,
+   "sex": "FEMALE"
+  },
+  {
+   "name": "Back & Biceps Emphasis",
+   "emphasis": "BACK & BICEPS",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "Arms & Shoulders Emphasis",
+   "emphasis": "ARMS & SHOULDERS",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "Chest & Back Emphasis",
+   "emphasis": "CHEST & BACK",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "Lower Body Emphasis",
+   "emphasis": "LOWER BODY",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "Upper Body Emphasis",
+   "emphasis": "UPPER BODY",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "Whole Body Daily",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 5,
+   "sex": "MALE"
+  },
+  {
+   "name": "Whole Body Split",
+   "emphasis": "WHOLE BODY",
+   "days_per_week": 5,
+   "sex": "MALE"
+  }
+ ],
+ "note": "Template detail page: Day tabs \u2192 ordered list of (muscle group, exercise); button 'Plan a new mesocycle'. Catalog day contents not exported (RP-owned content)."
+}
