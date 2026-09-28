@@ -357,8 +357,13 @@
 
   function shell(body) {
     const r = route()[0] || "today";
-    return '<div class="shell"><div class="main" id="main">' + body + disclaimer() + '</div>' +
+    const html = '<div class="shell"><div class="main" id="main">' + body + disclaimer() + '</div>' +
       nav(r) + '<div id="toast" class="toast">' + esc(state.toast) + "</div>" + modalHtml() + "</div>";
+    /* htmlpreview injects a <base> pointing at the raw file. A bare #/workout
+       link then leaves the preview and the browser shows the HTML as text.
+       Absolute links stay on this document and only change the hash. */
+    const here = location.origin + location.pathname + location.search;
+    return html.replace(/href="#\//g, function () { return 'href="' + here + "#/"; });
   }
 
   function disclaimer() {
