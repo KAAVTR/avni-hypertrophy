@@ -318,6 +318,7 @@
     document.body.addEventListener("click", onClick);
     document.body.addEventListener("input", onInput);
     document.body.addEventListener("change", onChange);
+    document.body.addEventListener("focusin", onFocusIn);
     document.body.addEventListener("dragstart", onDragStart);
     document.body.addEventListener("dragover", (e) => {
       if (e.target.closest("[data-drop]")) e.preventDefault();
@@ -553,9 +554,9 @@
     const readOnly = !canEdit || done;
     let html = '<div class="set-row">';
     html += '<span class="idx">' + (index + 1) + "</span>";
-    const anchorRep = anchorTargetReps(ex, set);
-    html += '<input class="field" inputmode="decimal" data-focus="w-' + esc(set.id) + '" data-set="' + esc(set.id) + '" data-field="weight" data-key="' + esc(meso.key) + '" data-anchor-weight="' + esc(trimNum(set.weight)) + '"' + (anchorRep != null ? ' data-anchor-reps="' + esc(String(anchorRep)) + '"' : "") + ' placeholder="' + esc(unit) + '" value="' + esc(trimNum(set.weight)) + '"' + (readOnly ? " readonly" : "") + ">";
-    const repPh = set.repsTarget != null ? String(set.repsTarget) : "reps";
+    const ownRep = set.repsTarget != null && set.repsTarget !== "" ? Number(set.repsTarget) : null;
+    html += '<input class="field" inputmode="decimal" data-focus="w-' + esc(set.id) + '" data-set="' + esc(set.id) + '" data-field="weight" data-key="' + esc(meso.key) + '" data-anchor-weight="' + esc(trimNum(set.weight)) + '"' + (ownRep != null ? ' data-anchor-reps="' + esc(String(ownRep)) + '"' : "") + ' placeholder="' + esc(unit) + '" value="' + esc(trimNum(set.weight)) + '"' + (readOnly ? " readonly" : "") + ">";
+    const repPh = ownRep != null ? String(ownRep) : (rir != null && rir !== 8 ? rir + " RIR" : "reps");
     html += '<input class="field" inputmode="numeric" data-focus="r-' + esc(set.id) + '" data-set="' + esc(set.id) + '" data-field="reps" data-key="' + esc(meso.key) + '" placeholder="' + esc(repPh) + '" value="' + esc(set.reps == null || set.reps < 0 ? "" : trimNum(set.reps)) + '"' + (readOnly ? " readonly" : "") + ">";
     if (canEdit) {
       html += '<button class="check' + (done ? " on" : "") + '" data-action="toggle-set" data-key="' + esc(meso.key) + '" data-set="' + esc(set.id) + '" aria-label="Log set">✓</button>';
@@ -564,16 +565,13 @@
     }
     html += "</div>";
     const hint = recommendText(set, rir, unit);
-    if (hint) html += '<div class="hint">' + esc(hint) + (set.setType && set.setType !== "regular" ? " · " + esc(set.setType) : "") + "</div>";
-    else if (set.setType && set.setType !== "regular") html += '<div class="hint">' + esc(set.setType) + "</div>";
+    const typeNote = set.setType && set.setType !== "regular" ? set.setType : "";
+    const fullHint = hint && typeNote ? hint + " · " + typeNote : (hint || typeNote);
+    if (fullHint || (canEdit && !done)) {
+      html += '<div class="hint" data-hint="' + esc(set.id) + '"' + (typeNote ? ' data-type-note="' + esc(typeNote) + '"' : "") + (fullHint ? "" : " hidden") + ">" + esc(fullHint) + "</div>";
+    }
     if (canEdit && !done) html += '<div class="tradeoff" data-tradeoff="' + esc(set.id) + '" hidden></div>';
     return html;
-  }
-
-  function anchorTargetReps(ex, set) {
-    if (set.repsTarget != null && set.repsTarget !== "") return Number(set.repsTarget);
-    const hit = (ex.sets || []).find((s) => s.repsTarget != null && s.repsTarget !== "");
-    return hit ? Number(hit.repsTarget) : null;
   }
 
   function coachPhrase(rec) {
@@ -1453,9 +1451,9 @@
 
   function applyWeightRepTradeoff(loc, set, weightInput) {
     const O = window.Overload;
-    if (!O || !set) return;
-    const anchorW = weightInput ? Number(weightInput.dataset.anchorWeight) : NaN;
-    const anchorR = weightInput ? Number(weightInput.dataset.anchorReps) : NaN;
+    if (!O || !set || !weightInput) return;
+    const anchorW = Number(weightInput.dataset.anchorWeight);
+    const anchorR = Number(weightInput.dataset.anchorReps);
     if (!(anchorW > 0) || !(anchorR > 0)) return;
     const equip = state.equipByName[L.normName(loc.ex.name)] || "";
     const unit = set.unit || loc.day.unit || loc.meso.unit || "lb";
@@ -1468,13 +1466,28 @@
     });
     const repsInput = document.querySelector('[data-set="' + CSS.escape(String(set.id)) + '"][data-field="reps"]');
     const tipEl = document.querySelector('[data-tradeoff="' + CSS.escape(String(set.id)) + '"]');
+    const weekRir = L.weekRir(loc.meso, loc.day.week);
     if (adj.ignored) return;
+    if (adj.mode === "rir") {
+      set.repsTarget = null;
+      if (repsInput) {
+        repsInput.placeholder = adj.rirText;
+        repsInput.classList.add("suggested");
+      }
+      if (tipEl) {
+        tipEl.hidden = false;
+        tipEl.textContent = adj.rirText;
+      }
+      paintRecommendHint(set, weekRir, unit);
+      return;
+    }
     if (adj.reps == null) return;
     set.repsTarget = adj.reps;
     if (repsInput) {
       repsInput.placeholder = String(adj.reps);
       repsInput.classList.toggle("suggested", !!adj.tip);
     }
+    paintRecommendHint(set, weekRir, unit);
     if (!tipEl) return;
     if (adj.tip) {
       tipEl.hidden = false;
@@ -1483,6 +1496,44 @@
       tipEl.hidden = true;
       tipEl.textContent = "";
     }
+  }
+
+  function paintRecommendHint(set, rir, unit) {
+    const hintEl = document.querySelector('[data-hint="' + CSS.escape(String(set.id)) + '"]');
+    if (!hintEl) return;
+    const text = recommendText(set, rir, unit);
+    const typeNote = hintEl.dataset.typeNote || "";
+    const full = text && typeNote ? text + " · " + typeNote : (text || typeNote);
+    hintEl.textContent = full;
+    hintEl.hidden = !full;
+  }
+
+  function onFocusIn(e) {
+    const t = e.target;
+    if (!t.dataset || t.dataset.field !== "weight" || !t.dataset.set) return;
+    t.dataset.preWeight = t.value;
+  }
+
+  function commitWeightEdit(input) {
+    const loc = findSet(input.dataset.set);
+    if (!loc || !L.isEditable(loc.meso)) return;
+    const num = input.value === "" ? null : Number(input.value);
+    if (num != null && Number.isNaN(num)) return;
+    const pre = input.dataset.preWeight != null && input.dataset.preWeight !== "" ? Number(input.dataset.preWeight) : null;
+    loc.set.weight = num;
+    applyWeightRepTradeoff(loc, loc.set, input);
+    if (state.overlay.settings.autoMatch && pre != null && !Number.isNaN(pre)) {
+      loc.ex.sets.forEach((s) => {
+        if (s === loc.set || s.status === "complete" || s.status === "skipped") return;
+        if (Number(s.weight) !== pre) return;
+        s.weight = num;
+        const el = document.querySelector('[data-set="' + CSS.escape(String(s.id)) + '"][data-field="weight"]');
+        if (el && document.activeElement !== el) el.value = num == null ? "" : String(trimNum(num));
+        applyWeightRepTradeoff(loc, s, el);
+      });
+    }
+    input.dataset.preWeight = input.value;
+    persistDay(loc.meso, loc.day);
   }
 
   function onInput(e) {
@@ -1499,30 +1550,18 @@
     if (t.dataset.field && t.dataset.set) {
       const loc = findSet(t.dataset.set);
       if (!loc || !L.isEditable(loc.meso)) return;
-      const prev = loc.set[t.dataset.field];
       const num = t.value === "" ? null : Number(t.value);
       loc.set[t.dataset.field] = num;
-      if (t.dataset.field === "weight") {
-        applyWeightRepTradeoff(loc, loc.set, t);
-        if (state.overlay.settings.autoMatch && prev != null) {
-          const idx = loc.ex.sets.findIndex((s) => s.id === loc.set.id);
-          for (let i = idx + 1; i < loc.ex.sets.length; i++) {
-            const s = loc.ex.sets[i];
-            if (s.weight === prev && s.status !== "complete" && s.status !== "skipped") {
-              s.weight = num;
-              const el = document.querySelector('[data-set="' + CSS.escape(String(s.id)) + '"][data-field="weight"]');
-              if (el && document.activeElement !== el) el.value = num == null ? "" : String(num);
-              applyWeightRepTradeoff(loc, s, el);
-            }
-          }
-        }
-      }
-      persistDay(loc.meso, loc.day);
+      if (t.dataset.field !== "weight") persistDay(loc.meso, loc.day);
     }
   }
 
   function onChange(e) {
     const t = e.target;
+    if (t.dataset && t.dataset.field === "weight" && t.dataset.set) {
+      commitWeightEdit(t);
+      return;
+    }
     if (t.id === "import-file" && t.files && t.files[0]) {
       importFile(t.files[0]);
       return;

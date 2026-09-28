@@ -223,34 +223,42 @@
     return null;
   }
 
-  /* Load ↔ reps at a steady effort.
+  /* Load ↔ reps at a steady effort, checked against the Week 3 squat.
      Public Epley: e1RM = weight * (1 + repsToFailure / 30).
-     Reps to failure ≈ reps you mean to perform + the week's target RIR
-     (RIR is how many reps you leave in the tank). Hold that e1RM fixed
-     when the working weight changes and solve for the new rep target:
+     Reps to failure ≈ target reps + the week's RIR. Hold e1RM fixed:
 
        k = lastWeight / newWeight
        newReps = k * lastReps + (30 + reserve) * (k - 1)
 
-     reserve is the week's RIR when it is a real proximity-to-failure
-     number (0–3 on this account, up to 5). Export code 8 means deload,
-     not eight reps in reserve, so it is not added.
+     Live check, 0 RIR week, baseline 230 lb × 5:
+       207 lb (−10%) → raw 8.89 → 9 reps. That is the calibration point.
+     Export code 8 means deload, not eight reps in reserve, so it is not added.
 
-     Around 5–15 reps the slope is about one rep per ~2.5% of load. That
-     matches the export's ~2.25% weekly bump (smaller than a full rep, so
-     the weekly plan holds reps) and the public double-progression rule
-     (a jump of several percent is traded for reps). A bigger drop adds
-     more than one rep. Pump, soreness, and workload do not enter this. */
+     Numeric reps only inside the usable band. The export's recommend floor
+     is about 0.875× the target, and the live check left the number behind
+     at about −20%/−30% and at +10%:
+       184 lb and 161 lb → no reps, show the week's RIR
+       253 lb (+10%) → no reps, show the week's RIR
+     A tiny plate step inside the band still rounds to the same reps.
+     Pump, soreness, and workload do not enter this. */
   var EPLEY_REPS = 30;
   var REP_MIN = 1;
   var REP_MAX = 30;
-  var MIN_WEIGHT_RATIO = 0.4;
+  var TRADE_BAND_MIN = 0.875;
+  var TRADE_BAND_MAX = 1.1;
 
   function epleyReserve(weekRir) {
     var r = Number(weekRir);
     if (r === 8 || r == null || Number.isNaN(r) || r < 0) return 0;
     if (r > 5) return 5;
     return r;
+  }
+
+  function rirText(weekRir) {
+    var r = Number(weekRir);
+    if (r === 8) return "Deload";
+    if (r == null || Number.isNaN(r)) return "0 RIR";
+    return r + " RIR";
   }
 
   function adjustRepsForWeight(input) {
@@ -260,20 +268,19 @@
     var newWeight = Number(input.newWeight);
     var step = Number(input.equipmentStep);
     var baseReps = Math.round(lastReps);
+    var label = rirText(input.weekRir);
     if (!(lastWeight > 0) || !(lastReps > 0)) {
-      return { reps: null, delta: 0, direction: "same", tip: "", ignored: true };
+      return { reps: null, delta: 0, direction: "same", tip: "", mode: "same", rirText: label, ignored: true };
     }
     if (!(newWeight > 0)) {
-      return { reps: baseReps, delta: 0, direction: "same", tip: "", ignored: false };
+      return { reps: baseReps, delta: 0, direction: "same", tip: "", mode: "reps", rirText: label, ignored: false };
     }
-    /* A leading digit ("2" on the way to "200") is not a working weight.
-       40% is under the ~50% late-deload loads, so a real half-weight cut
-       still counts. This guard is for typing, not a training constant. */
-    if (newWeight < lastWeight * MIN_WEIGHT_RATIO) {
-      return { reps: null, delta: 0, direction: "same", tip: "", ignored: true };
+    var ratio = newWeight / lastWeight;
+    if (ratio < TRADE_BAND_MIN || ratio >= TRADE_BAND_MAX) {
+      return { reps: null, delta: null, direction: "rir", tip: label, mode: "rir", rirText: label, ignored: false, ratio: Math.round(ratio * 1000) / 1000 };
     }
     if (step > 0 && Math.abs(newWeight - lastWeight) + 1e-9 < step) {
-      return { reps: baseReps, delta: 0, direction: "same", tip: "", ignored: false };
+      return { reps: baseReps, delta: 0, direction: "same", tip: "", mode: "reps", rirText: label, ignored: false };
     }
     var reserve = epleyReserve(input.weekRir);
     var k = lastWeight / newWeight;
@@ -289,8 +296,11 @@
       delta: delta,
       direction: direction,
       tip: tip,
+      mode: "reps",
+      rirText: label,
       ignored: false,
-      raw: Math.round(raw * 1000) / 1000
+      raw: Math.round(raw * 1000) / 1000,
+      ratio: Math.round(ratio * 1000) / 1000
     };
   }
 

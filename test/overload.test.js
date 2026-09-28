@@ -143,34 +143,35 @@ const w1ref = Overload.weekOneReference(goong, "Barbell Squat (High Bar)", 0);
 assert.strictEqual(w1ref.weight, 205);
 assert.strictEqual(w1ref.reps, 8);
 
-/* Same effort when she changes the weight on a set. Epley + week RIR. */
+/* Week 3 squat, live check: 230×5 at 0 RIR. */
 const same = Overload.adjustRepsForWeight({ lastWeight: 230, lastReps: 5, newWeight: 230, weekRir: 0, equipmentStep: 2.5 });
 assert.strictEqual(same.reps, 5);
-assert.strictEqual(same.direction, "same");
+assert.strictEqual(same.mode, "reps");
 assert.strictEqual(same.tip, "");
 
-const lighter = Overload.adjustRepsForWeight({ lastWeight: 230, lastReps: 5, newWeight: 200, weekRir: 0, equipmentStep: 2.5 });
-assert.strictEqual(lighter.reps, 10);
-assert.strictEqual(lighter.direction, "up");
-assert.strictEqual(lighter.tip, "weight ↓ → reps ↑");
+const minus10 = Overload.adjustRepsForWeight({ lastWeight: 230, lastReps: 5, newWeight: 207, weekRir: 0, equipmentStep: 2.5 });
+assert.strictEqual(minus10.reps, 9, "230 → 207 is 5 → 9");
+assert.strictEqual(minus10.mode, "reps");
+assert.strictEqual(minus10.tip, "weight ↓ → reps ↑");
+assert.ok(Math.abs(minus10.raw - 8.889) < 0.02, "Epley raw is just under 9");
 
-const heavier = Overload.adjustRepsForWeight({ lastWeight: 230, lastReps: 5, newWeight: 250, weekRir: 0, equipmentStep: 2.5 });
-assert.strictEqual(heavier.reps, 2);
-assert.strictEqual(heavier.direction, "down");
-assert.strictEqual(heavier.tip, "weight ↑ → reps ↓");
+function outsideBand(weight) {
+  const adj = Overload.adjustRepsForWeight({ lastWeight: 230, lastReps: 5, newWeight: weight, weekRir: 0, equipmentStep: 2.5 });
+  assert.strictEqual(adj.mode, "rir", weight + " should drop the number");
+  assert.strictEqual(adj.reps, null, weight + " invented a rep target");
+  assert.strictEqual(adj.rirText, "0 RIR");
+}
+outsideBand(184);
+outsideBand(161);
+outsideBand(253);
 
 const onePlate = Overload.adjustRepsForWeight({ lastWeight: 230, lastReps: 5, newWeight: 232.5, weekRir: 0, equipmentStep: 2.5 });
+assert.strictEqual(onePlate.mode, "reps");
 assert.strictEqual(onePlate.reps, 5, "a ~1% plate step is under one rep");
 
-const back = Overload.adjustRepsForWeight({ lastWeight: 200, lastReps: lighter.reps, newWeight: 230, weekRir: 0, equipmentStep: 2.5 });
-assert.strictEqual(back.reps, 5, "the curve is invertible within rounding");
-
 const weekRir2 = Overload.adjustRepsForWeight({ lastWeight: 205, lastReps: 5, newWeight: 185, weekRir: 2, equipmentStep: 2.5 });
+assert.strictEqual(weekRir2.mode, "reps");
 assert.strictEqual(weekRir2.reps, 9);
-assert.strictEqual(weekRir2.tip, "weight ↓ → reps ↑");
-
-const typing = Overload.adjustRepsForWeight({ lastWeight: 230, lastReps: 5, newWeight: 2, weekRir: 0, equipmentStep: 2.5 });
-assert.strictEqual(typing.ignored, true);
 
 console.log("overload tests ok", {
   squat: squatW2rec.weight + "x" + squatW2rec.reps + " → " + squatW3rec.weight + "x" + squatW3rec.reps,
