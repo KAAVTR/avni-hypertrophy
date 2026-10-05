@@ -103,6 +103,38 @@ const merged = Logic.mergeBodyweight(bw.entries, [{ date: "2026-09-27", bodyweig
 assert.strictEqual(merged.length, 23);
 assert.strictEqual(merged[merged.length - 1].bodyweight, 194);
 
+const replacedDay = Logic.clone(current.weeks[2].days[0]);
+const squatCard = replacedDay.exercises[0];
+const extensionCard = Logic.clone(replacedDay.exercises[1]);
+assert.strictEqual(squatCard.name, "Barbell Squat (High Bar)");
+assert.strictEqual(squatCard.sets[0].repsTarget, 5);
+assert.strictEqual(squatCard.sets[0].weightTarget, 230);
+assert.strictEqual(squatCard.sets[2].repsTarget, null);
+const keptId = squatCard.sets[0].id;
+const keptType = squatCard.sets[0].setType;
+const keptUnit = squatCard.sets[0].unit;
+squatCard.sets[0].progressiveOverload = "increase";
+squatCard.sets[0].reps = 5;
+squatCard.sets[0].status = "complete";
+Logic.clearReplacedSetTargets(squatCard);
+squatCard.sets.forEach((set) => {
+  assert.strictEqual(set.weight, null);
+  assert.strictEqual(set.weightTarget, null);
+  assert.strictEqual(set.weightTargetMin, null);
+  assert.strictEqual(set.weightTargetMax, null);
+  assert.strictEqual(set.reps, null);
+  assert.strictEqual(set.repsTarget, null);
+  assert.strictEqual(set.progressiveOverload, null);
+  assert.strictEqual(set.status, "ready");
+  assert.strictEqual(set.finishedAt, null);
+});
+assert.strictEqual(squatCard.sets.length, 3);
+assert.strictEqual(squatCard.sets[0].id, keptId);
+assert.strictEqual(squatCard.sets[0].setType, keptType);
+assert.strictEqual(squatCard.sets[0].unit, keptUnit);
+assert.deepStrictEqual(replacedDay.exercises[1], extensionCard);
+assert.strictEqual(Logic.weekRir(current, 2), 0);
+
 const kgBoard = Logic.stripTargets(copy);
 const kgMeso = Logic.createMeso({ name: "Kg", weeks: 5, unit: "kg", board: kgBoard, now: "2026-09-27T00:00:00.000Z" });
 assert.strictEqual(kgMeso.weeks[0].days[0].exercises[0].sets.length, 0, "unit change does not invent converted weights");

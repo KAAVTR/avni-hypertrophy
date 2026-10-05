@@ -783,6 +783,21 @@
     };
   }
 
+  function clearReplacedSetTargets(ex) {
+    (ex && ex.sets || []).forEach(function (set) {
+      set.weight = null;
+      set.weightTarget = null;
+      set.weightTargetMin = null;
+      set.weightTargetMax = null;
+      set.reps = null;
+      set.repsTarget = null;
+      set.progressiveOverload = null;
+      set.status = "ready";
+      set.finishedAt = null;
+    });
+    return ex;
+  }
+
   function refreshExerciseStatus(ex) {
     if (!ex.sets || !ex.sets.length) {
       ex.status = "empty";
@@ -938,6 +953,7 @@
     boardIssues: boardIssues,
     createMeso: createMeso,
     endMesoRecord: endMesoRecord,
+    clearReplacedSetTargets: clearReplacedSetTargets,
     refreshExerciseStatus: refreshExerciseStatus,
     refreshDayStatus: refreshDayStatus,
     mesoSummary: mesoSummary,

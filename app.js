@@ -1919,19 +1919,11 @@
       }
     } else if (state.modal.mode === "replace") {
       const found = findEx(state.modal.key, state.modal.week, state.modal.day, state.modal.ex);
-      if (found) {
+      if (found && L.isEditable(found.meso)) {
         found.ex.name = chosen.name;
         found.ex.exerciseId = (lib && lib.exercise_id) || null;
         found.ex.muscleGroupId = lib ? L.MUSCLE_ID[lib.muscle] : found.ex.muscleGroupId;
-        found.ex.sets.forEach((s) => {
-          s.weight = null;
-          s.weightTarget = null;
-          s.weightTargetMin = null;
-          s.weightTargetMax = null;
-          s.reps = null;
-          s.status = "ready";
-          s.finishedAt = null;
-        });
+        L.clearReplacedSetTargets(found.ex);
         persistDay(found.meso, found.day);
       }
     }
