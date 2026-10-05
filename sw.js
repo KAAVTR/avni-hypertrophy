@@ -1,23 +1,28 @@
-const CACHE = 'goong-v2';
+const CACHE = "hypertrophy-v2";
 const ASSETS = [
-  './',
-  './index.html',
-  './program.b64',
-  './chunks/app-0',
-  './chunks/app-1',
-  './chunks/app-2',
-  './chunks/app-3',
-  './manifest.webmanifest',
-  './favicon.svg',
+  "./",
+  "./index.html",
+  "./styles.css",
+  "./logic.js",
+  "./overload.js",
+  "./app.js",
+  "./manifest.webmanifest",
+  "./favicon.svg",
+  "./data/official/rp-training-data.json.gz",
+  "./data/official/rp-training-data.json",
+  "./data/exercise-library.json",
+  "./data/templates.json",
+  "./data/bodyweight-log.json",
+  "./data/settings-profile.json"
 ];
 
-self.addEventListener('install', (event) => {
+self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()).catch(() => self.skipWaiting())
   );
 });
 
-self.addEventListener('activate', (event) => {
+self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys()
       .then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))))
@@ -25,9 +30,9 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener("fetch", (event) => {
   const req = event.request;
-  if (req.method !== 'GET') return;
+  if (req.method !== "GET") return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
   event.respondWith(
@@ -39,6 +44,6 @@ self.addEventListener('fetch', (event) => {
         }
         return res;
       })
-      .catch(() => caches.match(req).then((hit) => hit || caches.match('./index.html')))
+      .catch(() => caches.match(req).then((hit) => hit || caches.match("./index.html")))
   );
 });

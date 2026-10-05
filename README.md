@@ -1,37 +1,35 @@
-# Keep it goong
+# Hypertrophy
 
-Personal workout logger for Avni. Open it on your phone, pick the day, and log weight, reps, and a checkmark for each set.
+Personal workout log for Avni. It is a free, offline-capable page for the mesocycles, history, exercises, and bodyweight already in her export, plus anything she adds on the phone.
 
-It is a free page for one mesocycle. It is not affiliated with RP Strength, and it does not need an RP account.
+It is not affiliated with RP Strength, and it does not need an RP account. Built-in template workouts are not included. Numbers on the page come from the export or from what you type.
 
-## On your iPhone
+## Open it
 
-Open this link in Safari or Chrome:
+**https://htmlpreview.github.io/?https://raw.githubusercontent.com/KAAVTR/avni-hypertrophy/main/index.html**
 
-**https://htmlpreview.github.io/?https://raw.githubusercontent.com/KAAVTR/avni-hypertrophy/bcb9dcd9/index.html**
+After the first load the history is stored on the phone (IndexedDB), so later visits work offline. Add to Home Screen if you want an icon. That icon keeps a separate log from the browser tab, so pick one and stick with it.
 
-1. You land on the current day: **Week 3, Day 1**.
-2. Use the arrows, or tap **All weeks**, to move between weeks and days.
-3. Type weight and reps, then tap the box to log the set. It saves on this phone automatically.
-4. Tap **Edit** to rename a lift or add and remove sets. Tap **Done** when you finish.
-5. Tap **···** to mark the day logged, reset the day back to the export, or download a backup.
+Shorter link, once GitHub Pages is turned on for this repo (`main` / root):
 
-Logs stay in the browser (`localStorage`). They are not uploaded.
-
-Add to Home Screen (Share → Add to Home Screen) if you want an icon. That icon keeps a **separate** log from the Safari tab, so pick one and stick with it.
-
-### Shorter link (one settings click)
-
-GitHub’s automatic publish step cannot turn Pages on for this account. To get `https://kaavtr.github.io/avni-hypertrophy/`:
+**https://kaavtr.github.io/avni-hypertrophy/**
 
 1. Open https://github.com/KAAVTR/avni-hypertrophy/settings/pages
-2. Under **Build and deployment**, set **Source** to **Deploy from a branch**.
-3. Branch **main**, folder **/ (root)**, then **Save**.
-4. Wait about a minute, then open https://kaavtr.github.io/avni-hypertrophy/
+2. Source: **Deploy from a branch**
+3. Branch **main**, folder **/ (root)**, Save
+
+## What’s in it
+
+- **Today** opens the current mesocycle, Keep it goong, on the week and day that are actually up next (Week 3, Day 1 in the export). A coach line suggests weight and reps from the last logged session: a small load bump (about +2.3% when the plates allow), the same weight plus one rep when a dumbbell jump is too big, or a lighter deload (~90% of week 1 early in the week, ~50% later). Traps and forearms are optional on deload. After you log a set, the next week’s suggestion shows under that lift. If you leave the weight field after a small drop, the rep target rises (230 lb × 5 becomes 207 lb × 9). A drop around 20% or more, or a raise around 10%, clears the number and shows that week’s RIR instead. The change waits until you leave the field. Matching weights on the other sets of that lift follow. Set counts are not changed from pump or soreness.
+- **Mesos** lists all 23 exported mesocycles. Finished ones are read-only. The current one, and any you create here, can be logged.
+- **History** lists every workout (705 in the export). Filter by status and open a day.
+- **Plan a mesocycle** copies one of your weeks, starts from your custom template “2026 Plan”, runs a lite muscle-priority builder, or starts from a blank board. Catalog names are listed without their day contents.
+- **Lifts** is the 305-exercise library with last-performed dates and set history.
+- **More** has bodyweight (22 exported entries, plus new ones), JSON export, and JSON import.
+
+Logs you add stay on the phone, layered on top of the seed file. Export a backup from More if you want a copy.
 
 ## Run it locally
-
-From this folder:
 
 ```bash
 python3 -m http.server 43123
@@ -39,16 +37,7 @@ python3 -m http.server 43123
 
 Open [http://127.0.0.1:43123](http://127.0.0.1:43123).
 
-## What’s in the program
-
-`program.json` is the exported mesocycle **Keep it goong**: 4 weeks, 5 days, starting Sep 14, 2026. Week 4 is the deload.
-
-Numbers on the page come from that file only.
-
-- Weeks 1–2 are filled with what was already logged or skipped.
-- Week 3 days 1–3 have planned weights and rep targets. Rep boxes start empty so you can type what you actually did. The gray number in the box is the target.
-- Week 3 days 4–5 and all of week 4 were not programmed in the export. Those days list the same lifts and prefill the last logged weight. They are not new numbers.
-
-Reset a day from **···** if you want the export back.
-
-The public page shows the program (lift names and the weights already in the export). Sets you log stay on the phone.
+```bash
+node test/logic.test.js
+node test/overload.test.js
+```
