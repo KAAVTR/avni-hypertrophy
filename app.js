@@ -68,25 +68,48 @@
   }
 
   function go(hash) {
-    if (location.hash === hash) {
-      state.keepModal = false;
-      render();
+    const apply = () => {
+      if (location.hash === hash) {
+        state.keepModal = false;
+        render();
+        return;
+      }
+      state.keepModal = true;
+      location.hash = hash;
+    };
+    if (state.sheetOnStack) {
+      state.sheetOnStack = false;
+      state.holdSheet = true;
+      state.ignorePop = true;
+      const after = () => {
+        window.removeEventListener("popstate", after);
+        state.ignorePop = false;
+        state.holdSheet = false;
+        apply();
+      };
+      window.addEventListener("popstate", after);
+      history.back();
       return;
     }
-    state.keepModal = true;
-    location.hash = hash;
+    apply();
   }
 
   function flash(msg) {
     state.toast = msg;
     render();
-    const el = $("#toast");
-    if (el) el.classList.add("show");
     clearTimeout(flash.t);
     flash.t = setTimeout(() => {
+      state.toast = "";
       const n = $("#toast");
-      if (n) n.classList.remove("show");
+      if (n) {
+        n.classList.remove("show");
+        n.textContent = "";
+      }
     }, 2600);
+  }
+
+  function queueFlash(msg) {
+    state.pendingFlash = msg;
   }
 
   function asset(path) {
@@ -218,26 +241,73 @@
       if (i >= 0) state.overlay.newMesos[i] = copy;
       else state.overlay.newMesos.push(copy);
     } else {
-      state.overlay.mesoMeta[meso.key] = Object.assign({}, state.overlay.mesoMeta[meso.key] || {}, {
+      const meta = Object.assign({}, state.overlay.mesoMeta[meso.key] || {}, {
         name: meso.name,
         status: meso.status,
         finishedAt: meso.finishedAt,
         notes: meso.notes || []
       });
+      if ("endedBy" in meso) meta.endedBy = meso.endedBy;
+      if ("previousStatus" in meso) meta.previousStatus = meso.previousStatus;
+      if ("previousFinishedAt" in meso) meta.previousFinishedAt = meso.previousFinishedAt;
+      state.overlay.mesoMeta[meso.key] = meta;
     }
     scheduleSave();
   }
 
   function saveBoard() {
-    try { sessionStorage.setItem("goong-board", JSON.stringify(state.board)); } catch (e) { /* ignore */ }
+    const payload = state.board || null;
+    try {
+      if (payload) {
+        const raw = JSON.stringify(payload);
+        sessionStorage.setItem("goong-board", raw);
+        localStorage.setItem("avni-hypertrophy-board", raw);
+      } else {
+        sessionStorage.removeItem("goong-board");
+        localStorage.removeItem("avni-hypertrophy-board");
+      }
+    } catch (e) { /* ignore quota */ }
+    if (state.overlay) {
+      state.overlay.board = payload ? L.clone(payload) : null;
+      scheduleSave();
+    }
+  }
+
+  function readStoredBoard() {
+    if (state.overlay && state.overlay.board && state.overlay.board.days) return L.clone(state.overlay.board);
+    try {
+      const local = localStorage.getItem("avni-hypertrophy-board");
+      if (local) {
+        const parsed = JSON.parse(local);
+        if (parsed && parsed.days) return parsed;
+      }
+    } catch (e) { /* ignore */ }
+    try {
+      const session = sessionStorage.getItem("goong-board");
+      if (session) {
+        const parsed = JSON.parse(session);
+        if (parsed && parsed.days) return parsed;
+      }
+    } catch (e) { /* ignore */ }
+    return null;
   }
 
   function loadBoard() {
     if (state.board) return;
-    try {
-      const raw = sessionStorage.getItem("goong-board");
-      if (raw) state.board = JSON.parse(raw);
-    } catch (e) { /* ignore */ }
+    const board = readStoredBoard();
+    if (!board) return;
+    state.board = board;
+    if (state.overlay && !state.overlay.board) {
+      state.overlay.board = L.clone(board);
+      scheduleSave();
+    }
+  }
+
+  function boardIsDirty(board) {
+    if (!board || !board.days) return false;
+    if (board.targetsIncluded) return true;
+    if (board.days.some((day) => (day.slots || []).length)) return true;
+    return board.days.length !== 2;
   }
 
   async function boot() {
@@ -325,21 +395,55 @@
     });
     document.body.addEventListener("drop", onDrop);
     window.addEventListener("hashchange", () => {
+      const next = route().join("/");
+      const changed = state.routeKey != null && state.routeKey !== next;
+      state.routeKey = next;
       if (!state.keepModal) state.modal = null;
       state.keepModal = false;
+      if (changed) {
+        state.scrollRoute = true;
+        state.sheetOnStack = false;
+      }
       render();
+    });
+    window.addEventListener("popstate", () => {
+      if (state.ignorePop) {
+        state.ignorePop = false;
+        return;
+      }
+      if (!state.sheetOnStack) return;
+      state.sheetOnStack = false;
+      state.holdSheet = true;
+      state.modal = null;
+      render();
+      state.holdSheet = false;
     });
   }
 
   function render() {
-    const main = $("#main");
-    const scroll = main ? main.scrollTop : 0;
+    if (state.pendingFlash) {
+      state.toast = state.pendingFlash;
+      state.pendingFlash = "";
+      clearTimeout(flash.t);
+      flash.t = setTimeout(() => {
+        state.toast = "";
+        const n = $("#toast");
+        if (n) {
+          n.classList.remove("show");
+          n.textContent = "";
+        }
+      }, 2600);
+    }
+    if (state.routeKey == null) state.routeKey = route().join("/");
+    const scrollY = window.scrollY || 0;
+    const jump = !!state.scrollRoute;
+    state.scrollRoute = false;
     const active = document.activeElement;
     const focus = active && active.dataset ? active.dataset.focus : "";
     const caret = active && typeof active.selectionStart === "number" ? active.selectionStart : null;
     $("#app").innerHTML = shell(screenForRoute());
-    const next = $("#main");
-    if (next) next.scrollTop = scroll;
+    if (jump) window.scrollTo(0, 0);
+    else window.scrollTo(0, scrollY);
     if (focus) {
       const el = document.querySelector('[data-focus="' + CSS.escape(focus) + '"]');
       if (el) {
@@ -352,6 +456,16 @@
     if (state.toast) {
       const t = $("#toast");
       if (t) t.classList.add("show");
+    }
+    if (state.modal && !state.sheetOnStack && !state.holdSheet) {
+      state.sheetOnStack = true;
+      try { history.pushState({ hypSheet: 1 }, ""); }
+      catch (err) { state.sheetOnStack = false; }
+    } else if (!state.modal && state.sheetOnStack && !state.holdSheet) {
+      state.sheetOnStack = false;
+      state.ignorePop = true;
+      try { history.back(); }
+      catch (err) { state.ignorePop = false; }
     }
   }
 
@@ -392,7 +506,8 @@
       ["data", "More", "more"]
     ];
     return '<nav class="nav">' + items.map(([id, label, ic]) => {
-      const on = active === id || (id === "data" && (active === "bodyweight" || active === "data"));
+      const planOn = active === "plan" || active === "board" || active === "meso";
+    const on = active === id || (id === "data" && (active === "bodyweight" || active === "data")) || (id === "mesos" && planOn);
       return '<a href="#/' + id + '"' + (on ? ' class="active"' : "") + ">" + icon(ic) + "<span>" + label + "</span></a>";
     }).join("") + "</nav>";
   }
@@ -793,7 +908,7 @@
       html += '<div class="row" style="margin-bottom:8px"><span class="tiny faint" style="width:18px">' + (i + 1) + "</span>" + chip(ex.muscleGroupId) + '<span>' + esc(ex.name) + "</span></div>";
     });
     html += '<button class="textbtn" data-action="priorities-info">Learn about muscle priorities</button>';
-    html += '<button class="btn primary" style="margin-top:12px" data-action="do-copy" data-key="' + esc(key) + '" data-week="' + wi + '">Copy week ' + (wi + 1) + "</button>";
+    html += '<button class="btn primary sticky-cta" style="margin-top:12px" data-action="do-copy" data-key="' + esc(key) + '" data-week="' + wi + '">Copy week ' + (wi + 1) + "</button>";
     return html;
   }
 
@@ -917,8 +1032,12 @@
     html += '<div class="board">';
     board.days.forEach((day, di) => {
       html += '<div class="day-col" data-drop="day:' + di + '">';
-      html += '<div class="row between"><span class="tiny faint" draggable="true" data-drag="day:' + di + '">Drag</span>';
-      html += '<select class="field" style="width:auto;padding:6px" data-change="day-label" data-day="' + di + '">';
+      html += '<div class="row between day-head">';
+      html += '<button class="textbtn" data-action="move-day" data-day="' + di + '" data-dir="-1" aria-label="Move day earlier">←</button>';
+      html += '<button class="textbtn" data-action="move-day" data-day="' + di + '" data-dir="1" aria-label="Move day later">→</button>';
+      html += '<span class="drag-handle" draggable="true" data-drag="day:' + di + '">Drag</span>';
+      html += '<span class="tiny faint">Day ' + (di + 1) + " of " + board.days.length + "</span>";
+      html += '<select class="field" data-change="day-label" data-day="' + di + '">';
       html += '<option value="">Label</option>';
       L.WEEKDAYS.forEach((wd) => {
         html += '<option value="' + wd + '"' + (day.label === wd ? " selected" : "") + ">" + wd + "</option>";
@@ -929,7 +1048,7 @@
         const sum = L.slotSummary(slot);
         html += '<div class="slot" draggable="true" data-drag="slot:' + di + ":" + si + '" data-drop="slot:' + di + ":" + si + '">';
         html += '<div class="row between">' + chip(slot.muscleGroupId) + '<span class="priority">' + esc(slot.priority || "") + "</span></div>";
-        html += '<button class="choose" data-action="pick-exercise" data-day="' + di + '" data-slot="' + si + '">' + esc(slot.exerciseName || "Choose an exercise") + "</button>";
+        html += '<button class="choose' + (slot.exerciseName ? " filled" : "") + '" data-action="pick-exercise" data-day="' + di + '" data-slot="' + si + '">' + esc(slot.exerciseName || "Choose an exercise") + "</button>";
         if (sum && sum.weight != null) html += '<div class="tiny muted">' + sum.sets + " sets · " + trimNum(sum.weight) + (board.sourceUnit ? " " + esc(board.sourceUnit) : "") + (sum.reps != null ? " · " + sum.reps + " reps" : "") + "</div>";
         else html += '<div class="tiny faint">Manual</div>';
         html += '<div class="row">';
@@ -941,7 +1060,7 @@
     });
     html += '<button class="day-col" data-action="add-day" style="display:flex;align-items:center;justify-content:center;font-weight:700">Add a day</button>';
     html += "</div>";
-    html += '<button class="btn primary" data-action="open-create">Create mesocycle</button>';
+    html += '<button class="btn primary sticky-cta" data-action="open-create">Create mesocycle</button>';
     return html;
   }
 
@@ -1076,8 +1195,9 @@
     else if (m.type === "feedback") inner = feedbackModal();
     else if (m.type === "joint") inner = jointModal();
     else if (m.type === "custom-ex") inner = customExModal();
-    else if (m.type === "info") inner = '<h2>' + esc(m.title || "") + '</h2><p class="small muted">' + esc(m.body || "") + '</p><button class="btn primary" data-action="close-modal">OK</button>';
+    else if (m.type === "info") inner = '<h2>' + esc(m.title || "") + '</h2><p class="small muted">' + esc(m.body || "") + '</p><div class="sheet-foot"><button class="btn primary" data-action="close-modal">OK</button></div>';
     else if (m.type === "builder-muscles") inner = builderMusclesModal();
+    else if (m.type === "ex-detail") inner = exerciseDetailModal();
     return '<div class="backdrop" data-action="close-modal"><div class="sheet" data-sheet>' + inner + "</div></div>";
   }
 
@@ -1092,7 +1212,7 @@
     [4, 5, 6, 7, 8].forEach((n) => {
       html += '<button data-action="create-weeks" data-weeks="' + n + '"' + (weeks === n ? ' class="on"' : "") + ">" + n + "</button>";
     });
-    html += '</div><p class="tiny muted">Week targets ' + L.rirForWeeks(weeks).map((n) => n === 8 ? "DL" : n).join(", ") + ". The 7-week sequence sits between your 6- and 8-week mesos. No weights are generated for later weeks.</p>";
+    html += '</div><p class="tiny muted">Week targets ' + L.rirForWeeks(weeks).map((n) => n === 8 ? "DL" : n).join(", ") + ". The last week is a deload. No weights are generated for later weeks.</p>";
     html += '<div class="lbl">Units</div><div class="seg">';
     ["lb", "kg"].forEach((u) => {
       html += '<button data-action="create-unit" data-unit="' + u + '"' + (unit === u ? ' class="on"' : "") + ">" + u + "</button>";
@@ -1101,7 +1221,7 @@
     if (b.targetsIncluded && b.sourceUnit && b.sourceUnit !== unit) {
       html += '<p class="small muted">The copied week is in ' + esc(b.sourceUnit) + ". Weights will be left blank so nothing is converted.</p>";
     }
-    html += '<div class="btn-row" style="margin-top:14px"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="confirm-create">Create</button></div>';
+    html += '<div class="sheet-foot"><div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="confirm-create">Create</button></div></div>';
     return html;
   }
 
@@ -1159,6 +1279,7 @@
     html += '<button class="menu-item" data-action="summary" data-key="' + esc(meso.key) + '">Summary</button>';
     html += '<button class="menu-item" data-action="save-meso-template">Save as template</button>';
     if (L.isEditable(meso)) html += '<button class="menu-item" data-action="end-meso">End meso</button>';
+    else html += '<button class="menu-item" data-action="reopen-meso">Reopen meso</button>';
     if (meso.local) html += '<button class="menu-item" data-action="delete-meso">Delete meso</button>';
     html += '<button class="menu-item" data-action="close-modal">Close</button>';
     return html;
@@ -1197,10 +1318,10 @@
     list.forEach((ex) => {
       const on = state.ui.pickerId === ex.name;
       const last = state.lastByName[L.normName(ex.name)];
-      html += '<button class="option" data-action="choose-ex" data-name="' + esc(ex.name) + '" data-id="' + esc(ex.exercise_id || "") + '"><div class="row"><span class="radio' + (on ? " on" : "") + '"></span><div class="grow"><strong>' + esc(ex.name) + '</strong><div class="tiny muted">' + esc(ex.muscle) + " · " + esc(ex.equipment || "") + (last ? " · " + esc(fmtDate(last.date)) : "") + "</div></div>";
-      html += '<a href="#/exercise/' + encodeURIComponent(ex.name) + '">›</a></div></button>';
+      html += '<div class="picker-row"><button class="option" data-action="choose-ex" data-name="' + esc(ex.name) + '" data-id="' + esc(ex.exercise_id || "") + '"><div class="row"><span class="radio' + (on ? " on" : "") + '"></span><div class="grow"><strong>' + esc(ex.name) + '</strong><div class="tiny muted">' + esc(ex.muscle) + " · " + esc(ex.equipment || "") + (last ? " · " + esc(fmtDate(last.date)) : "") + "</div></div></div></button>";
+      html += '<button class="iconbtn picker-detail" data-action="ex-detail" data-name="' + esc(ex.name) + '" aria-label="Exercise details for ' + esc(ex.name) + '">›</button></div>';
     });
-    html += '<div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="confirm-ex">Select</button></div>';
+    html += '<div class="sheet-foot"><div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="confirm-ex">Select</button></div></div>';
     return html;
   }
 
@@ -1214,7 +1335,7 @@
         html += '<div class="row between" style="padding:6px 0">' + chip(id) + '<span class="counter"><button data-action="count-muscle" data-id="' + id + '" data-dir="-1">−</button><strong>' + n + '</strong><button data-action="count-muscle" data-id="' + id + '" data-dir="1">+</button></span></div>';
       });
     });
-    html += '<button class="btn primary" data-action="muscles-next">Add muscle groups</button>';
+    html += '<div class="sheet-foot"><div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="muscles-next">Add muscle groups</button></div></div>';
     return html;
   }
 
@@ -1230,27 +1351,35 @@
       html += "</select></div>";
     });
     html += '<p class="tiny muted">Emphasize: add volume when you are recovering. Grow: add volume only when needed. Maintain: keep them ticking over.</p>';
-    html += '<div class="btn-row"><button class="btn" data-action="' + (state.modal.boardEdit ? "close-modal" : "back-muscles") + '">' + (state.modal.boardEdit ? "Cancel" : "Back") + '</button><button class="btn primary" data-action="confirm-slots">Confirm</button></div>';
+    html += '<div class="sheet-foot"><div class="btn-row"><button class="btn" data-action="' + (state.modal.boardEdit ? "close-modal" : "back-muscles") + '">' + (state.modal.boardEdit ? "Cancel" : "Back") + '</button><button class="btn primary" data-action="confirm-slots">Confirm</button></div></div>';
     return html;
   }
 
   function builderMusclesModal() {
     const selected = {};
     (state.modal.picked || state.builder[state.builder.tab] || []).forEach((id) => { selected[id] = true; });
+    const elsewhere = {};
+    ["emphasize", "grow", "maintain"].forEach((name) => {
+      if (name === state.builder.tab) return;
+      (state.builder[name] || []).forEach((id) => { elsewhere[id] = name; });
+    });
     let html = "<h2>Choose muscle groups</h2>";
+    html += '<p class="small muted">A muscle can sit in one priority. Adding it here moves it off the other tabs.</p>';
     L.CATEGORIES.forEach((cat) => {
       html += '<div class="tiny faint" style="margin-top:8px">' + esc(cat.name).toUpperCase() + "</div>";
       cat.ids.forEach((id) => {
         const on = !!selected[id];
-        html += '<button class="option" data-action="toggle-builder-muscle" data-id="' + id + '"><div class="row"><span class="radio' + (on ? " on" : "") + '"></span>' + chip(id) + "</div></button>";
+        html += '<button class="option" data-action="toggle-builder-muscle" data-id="' + id + '"><div class="row"><span class="radio' + (on ? " on" : "") + '"></span>' + chip(id);
+        if (elsewhere[id] && !on) html += '<span class="tiny muted">In ' + esc(elsewhere[id]) + "</span>";
+        html += "</div></button>";
       });
     });
-    html += '<div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="add-builder-muscles">Add muscle groups</button></div>';
+    html += '<div class="sheet-foot"><div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="add-builder-muscles">Add muscle groups</button></div></div>';
     return html;
   }
 
   function noteModal() {
-    return '<h2>Note</h2><textarea class="field" rows="4" data-focus="note-text" data-modal="text" placeholder="Note"></textarea><div class="btn-row" style="margin-top:10px"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="save-note">Save</button></div>';
+    return '<h2>Note</h2><textarea class="field" rows="4" data-focus="note-text" data-modal="text" placeholder="Note"></textarea><div class="sheet-foot"><div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="save-note">Save</button></div></div>';
   }
 
   function relabelModal() {
@@ -1263,12 +1392,13 @@
 
   function renameModal() {
     const meso = L.findMeso(state.mesos, state.modal.key);
-    return '<h2>Rename</h2><input class="field" data-focus="rename" data-modal="name" value="' + esc(meso ? meso.name : "") + '"><div class="btn-row" style="margin-top:10px"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="save-rename">Save</button></div>';
+    const name = state.modal.name != null ? state.modal.name : (meso ? meso.name : "");
+    return '<h2>Rename</h2><input class="field" data-focus="rename" data-modal="name" value="' + esc(name) + '"><div class="sheet-foot"><div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="save-rename">Save</button></div></div>';
   }
 
   function bwModal() {
     const today = new Date().toISOString().slice(0, 10);
-    return '<h2>Bodyweight</h2><label class="lbl">Date</label><input class="field" type="date" data-modal="date" value="' + esc(state.modal.date || today) + '"><label class="lbl" style="margin-top:8px">Weight</label><input class="field" inputmode="decimal" data-focus="bw-val" data-modal="weight" placeholder="lb"><div class="btn-row" style="margin-top:10px"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="save-bw">Save</button></div>';
+    return '<h2>Bodyweight</h2><label class="lbl">Date</label><input class="field" type="date" data-modal="date" value="' + esc(state.modal.date || today) + '"><label class="lbl" style="margin-top:8px">Weight</label><input class="field" inputmode="decimal" data-focus="bw-val" data-modal="weight" placeholder="lb"><div class="sheet-foot"><div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="save-bw">Save</button></div></div>';
   }
 
   function summaryModal() {
@@ -1317,7 +1447,7 @@
   }
 
   function overloadModal() {
-    return "<h2>Meso to meso overload</h2><p class=\"small\">When you copy an accumulation week, week 1 keeps that week's load and rep targets. Later weeks stay empty until you log them.</p><p class=\"small muted\">After a logged session, the coach suggests next week: a small load bump, or the same weight plus one rep when the equipment jump is too big. Deload week is lighter. Set counts are not changed from pump or soreness.</p><button class=\"btn primary\" data-action=\"close-modal\">Got it</button>";
+    return "<h2>Meso to meso overload</h2><p class=\"small\">When you copy an accumulation week, week 1 keeps that week's load and rep targets. Later weeks stay empty until you log them.</p><p class=\"small muted\">After a logged session, the coach suggests next week: a small load bump, or the same weight plus one rep when the equipment jump is too big. Deload week is lighter. Set counts are not changed from pump or soreness.</p><div class=\"sheet-foot\"><button class=\"btn primary\" data-action=\"close-modal\">Got it</button></div>";
   }
 
   function autofillModal() {
@@ -1331,7 +1461,7 @@
       const on = (state.overlay.settings.preferredTypes || []).indexOf(type) !== -1;
       html += '<button class="btn slim' + (on ? " primary" : "") + '" data-action="toggle-type" data-type="' + esc(type) + '">' + esc(type) + "</button>";
     });
-    html += '</div><div class="btn-row" style="margin-top:10px"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="run-autofill">Recommend</button></div>';
+    html += '</div><div class="sheet-foot"><div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="run-autofill">Recommend</button></div></div>';
     return html;
   }
 
@@ -1347,7 +1477,7 @@
     L.WEEKDAYS.forEach((wd) => {
       html += '<button data-action="rec-day" data-day="' + wd + '"' + (picked[wd] ? ' class="on"' : "") + ">" + wd.slice(0, 3) + "</button>";
     });
-    html += '</div><div class="btn-row" style="margin-top:10px"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="save-start-day">Save</button></div>';
+    html += '</div><div class="sheet-foot"><div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="save-start-day">Save</button></div></div>';
     return html;
   }
 
@@ -1364,12 +1494,12 @@
     [2, 3, 4, 5, 6].forEach((n) => {
       html += '<option value="' + n + '"' + (String(f.days) === String(n) ? " selected" : "") + ">" + n + "</option>";
     });
-    html += '</select><div class="btn-row" style="margin-top:12px"><button class="btn" data-action="clear-filters">Cancel</button><button class="btn primary" data-action="close-modal">Apply</button></div>';
+    html += '</select><div class="sheet-foot"><div class="btn-row"><button class="btn" data-action="clear-filters">Cancel</button><button class="btn primary" data-action="close-modal">Apply</button></div></div>';
     return html;
   }
 
   function confirmModal() {
-    return "<h2>" + esc(state.modal.title || "Confirm") + '</h2><p class="small">' + esc(state.modal.body || "") + '</p><div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="' + esc(state.modal.yes || "close-modal") + '">' + esc(state.modal.yesLabel || "Confirm") + "</button></div>";
+    return "<h2>" + esc(state.modal.title || "Confirm") + '</h2><p class="small">' + esc(state.modal.body || "") + '</p><div class="sheet-foot"><div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="' + esc(state.modal.yes || "close-modal") + '">' + esc(state.modal.yesLabel || "Confirm") + "</button></div></div>";
   }
 
   function feedbackModal() {
@@ -1393,7 +1523,7 @@
       });
       html += "</div>";
     });
-    html += '<button class="btn primary" data-action="close-feedback">Done</button>';
+    html += '<div class="sheet-foot"><button class="btn primary" data-action="close-feedback">Done</button></div>';
     return html;
   }
 
@@ -1413,7 +1543,27 @@
       html += "<option>" + esc(name) + "</option>";
     });
     html += '</select><label class="lbl" style="margin-top:8px">Equipment</label><input class="field" data-modal="equipment" placeholder="Dumbbell">';
-    html += '<div class="btn-row" style="margin-top:10px"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="save-custom-ex">Save</button></div>';
+    html += '<div class="sheet-foot"><div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="save-custom-ex">Save</button></div></div>';
+    return html;
+  }
+
+  function exerciseDetailModal() {
+    const name = state.modal.name || "";
+    const lib = state.library.find((ex) => L.normName(ex.name) === L.normName(name));
+    const rows = L.exerciseHistory(state.mesos, name, lib && lib.exercise_id).slice(0, 20);
+    let html = '<div class="row" style="margin-bottom:8px"><button class="iconbtn" data-action="ex-detail-back" aria-label="Back">' + icon("back") + '</button><div class="titles"><div class="kicker">' + esc(lib ? lib.muscle : "Exercise") + '</div><h2 style="margin:0">' + esc(name) + "</h2></div></div>";
+    html += '<p class="small muted">' + esc(lib ? (lib.equipment || "No equipment listed") : "Not in the library") + "</p>";
+    if (!rows.length) html += '<div class="empty">No logged sets for this exercise yet.</div>';
+    rows.forEach((row) => {
+      html += '<div class="card"><div class="row between"><strong>' + esc(row.meso) + '</strong><span class="tiny muted">W' + row.week + " D" + row.day + "</span></div>";
+      html += '<div class="tiny muted">' + esc(row.date ? fmtDate(row.date) : "Not finished") + (row.label ? " · " + esc(row.label) : "") + "</div>";
+      html += '<div class="small" style="margin-top:6px">' + row.sets.map((s) => {
+        if (s.status === "skipped" || s.reps === -1) return "skipped";
+        if (s.reps == null) return (s.weight != null ? trimNum(s.weight) : "—") + " × —";
+        return trimNum(s.weight) + " × " + trimNum(s.reps);
+      }).join(" · ") + "</div></div>";
+    });
+    html += '<div class="sheet-foot"><button class="btn" data-action="ex-detail-back">Back to exercises</button></div>';
     return html;
   }
 
@@ -1440,6 +1590,17 @@
   }
 
   function onClick(e) {
+    const link = e.target.closest("a[href]");
+    if (link && state.sheetOnStack && state.modal && !(link.dataset && link.dataset.action)) {
+      const raw = link.getAttribute("href") || "";
+      const i = raw.indexOf("#/");
+      if (i >= 0) {
+        e.preventDefault();
+        state.modal = null;
+        go(raw.slice(i));
+        return;
+      }
+    }
     const btn = e.target.closest("[data-action]");
     if (!btn) return;
     const action = btn.dataset.action;
@@ -1651,37 +1812,62 @@
     else if (action === "open-muscles") state.modal = { type: "builder-muscles", picked: state.builder[state.builder.tab].slice() };
     else if (action === "toggle-builder-muscle") toggleBuilderMuscle(Number(d.id));
     else if (action === "add-builder-muscles") {
-      state.builder[state.builder.tab] = (state.modal.picked || []).slice();
+      const picked = (state.modal.picked || []).slice();
+      const tab = state.builder.tab;
+      ["emphasize", "grow", "maintain"].forEach((name) => {
+        if (name === tab) state.builder[name] = picked;
+        else state.builder[name] = (state.builder[name] || []).filter((id) => picked.indexOf(id) === -1);
+      });
       state.modal = null;
     } else if (action === "clear-prio") state.builder[state.builder.tab] = [];
     else if (action === "prio-remove") state.builder[state.builder.tab].splice(Number(d.index), 1);
     else if (action === "prio-move") moveList(state.builder[state.builder.tab], Number(d.index), Number(d.dir));
-    else if (action === "builder-build") return builderBuild();
+    else if (action === "builder-build") return builderBuild(false);
+    else if (action === "do-builder-anyway") return builderBuild(true);
     else if (action === "add-day") addBoardDay();
+    else if (action === "move-day") {
+      if (moveList(state.board.days, Number(d.day), Number(d.dir))) saveBoard();
+    }
     else if (action === "remove-day") {
-      if (state.board) state.board.days.splice(Number(d.day), 1);
+      const day = state.board && state.board.days[Number(d.day)];
+      const label = day && day.label ? day.label : "this day";
+      state.modal = { type: "confirm", title: "Delete " + label + "?", body: "This removes the day and its exercises from the draft.", yes: "do-remove-day", yesLabel: "Delete", day: Number(d.day) };
+    } else if (action === "do-remove-day") {
+      if (state.board && state.modal) state.board.days.splice(Number(state.modal.day), 1);
       saveBoard();
+      state.modal = null;
     } else if (action === "add-muscle") state.modal = { type: "muscles", day: Number(d.day), counts: {} };
     else if (action === "count-muscle") {
       const id = d.id;
       const counts = state.modal.counts;
       counts[id] = Math.max(0, (counts[id] || 0) + Number(d.dir));
     } else if (action === "muscles-next") return musclesNext();
-    else if (action === "back-muscles") state.modal = { type: "muscles", day: state.modal.day, counts: state.modal.counts || {} };
+    else if (action === "back-muscles") state.modal = { type: "muscles", day: state.modal.day, counts: state.modal.counts || {}, items: state.modal.items || [] };
     else if (action === "confirm-slots") return confirmSlots();
     else if (action === "remove-slot") {
-      state.board.days[Number(d.day)].slots.splice(Number(d.slot), 1);
+      state.modal = { type: "confirm", title: "Remove this exercise?", body: "This removes the slot from the day.", yes: "do-remove-slot", yesLabel: "Remove", day: Number(d.day), slot: Number(d.slot) };
+    } else if (action === "do-remove-slot") {
+      if (state.board && state.modal) state.board.days[Number(state.modal.day)].slots.splice(Number(state.modal.slot), 1);
       saveBoard();
-    } else if (action === "move-slot") moveList(state.board.days[Number(d.day)].slots, Number(d.slot), Number(d.dir));
+      state.modal = null;
+    } else if (action === "move-slot") {
+      if (moveList(state.board.days[Number(d.day)].slots, Number(d.slot), Number(d.dir))) saveBoard();
+    }
     else if (action === "pick-exercise") openPicker({ day: Number(d.day), slot: Number(d.slot), muscleGroupId: state.board.days[Number(d.day)].slots[Number(d.slot)].muscleGroupId, mode: "slot" });
     else if (action === "choose-ex") {
       state.ui.pickerId = d.name;
       state.modal.chosen = { name: d.name, id: d.id || null };
+    } else if (action === "ex-detail") {
+      state.modal = { type: "ex-detail", name: d.name, picker: Object.assign({}, state.modal) };
+    } else if (action === "ex-detail-back") {
+      state.modal = state.modal && state.modal.picker ? state.modal.picker : null;
     } else if (action === "confirm-ex") return confirmExercise();
     else if (action === "open-autofill") state.modal = { type: "autofill", opts: { fillEmpty: true, replace: false, usePreferred: !!state.overlay.settings.usePreferred } };
     else if (action === "af-toggle") state.modal.opts[d.key] = !state.modal.opts[d.key];
     else if (action === "run-autofill") return runAutofill();
     else if (action === "clear-exercises") {
+      state.modal = { type: "confirm", title: "Clear exercises?", body: "This removes every chosen exercise and its weights from the draft. Muscle groups stay.", yes: "do-clear-exercises", yesLabel: "Clear" };
+    } else if (action === "do-clear-exercises") {
       (state.board.days || []).forEach((day) => day.slots.forEach((slot) => { slot.exerciseName = null; slot.exerciseId = null; slot.sets = []; }));
       saveBoard();
       state.modal = null;
@@ -1695,7 +1881,19 @@
     else if (action === "create-weeks") state.modal.weeks = Number(d.weeks);
     else if (action === "create-unit") state.modal.unit = d.unit;
     else if (action === "confirm-create") return confirmCreate();
-    else if (action === "open-start-day") state.modal = { type: "start-day", start: "Monday", days: { Monday: true, Tuesday: true, Wednesday: true, Thursday: true, Friday: true } };
+    else if (action === "do-confirm-create") return confirmCreate(true);
+    else if (action === "do-replace-board") {
+      const next = state.modal.pendingBoard;
+      const after = state.modal.pendingAfter;
+      commitBoard(next, after);
+      return;
+    } else if (action === "open-start-day") {
+      const labels = ((state.board && state.board.days) || []).map((day) => day.label).filter(Boolean);
+      const start = labels[0] || "Monday";
+      const days = {};
+      L.WEEKDAYS.forEach((wd) => { days[wd] = labels.length ? labels.indexOf(wd) !== -1 : ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"].indexOf(wd) !== -1; });
+      state.modal = { type: "start-day", start: start, days: days };
+    }
     else if (action === "start-pick") state.modal.start = d.day;
     else if (action === "rec-day") state.modal.days[d.day] = !state.modal.days[d.day];
     else if (action === "save-start-day") return saveStartDay();
@@ -1736,9 +1934,17 @@
       const loc = L.locateDay(state.mesos, state.modal.key, state.modal.week, state.modal.day);
       if (loc) persistDay(loc.meso, loc.day);
       state.modal = null;
-    } else if (action === "open-rename") state.modal = { type: "rename", key: state.modal.key, name: "" };
-    else if (action === "save-rename") return saveRename();
-    else if (action === "end-meso") return endMeso();
+    } else if (action === "open-rename") {
+      const meso = L.findMeso(state.mesos, state.modal.key);
+      state.modal = { type: "rename", key: state.modal.key, name: meso ? meso.name : "" };
+    } else if (action === "save-rename") return saveRename();
+    else if (action === "end-meso") {
+      const meso = L.findMeso(state.mesos, state.modal.key);
+      if (!meso) return;
+      state.modal = { type: "confirm", title: "End this mesocycle?", body: meso.name + " will be marked complete. Today becomes read-only until you reopen it.", yes: "do-end-meso", yesLabel: "End meso", key: meso.key };
+    } else if (action === "do-end-meso") return endMeso();
+    else if (action === "reopen-meso") return reopenMeso(false);
+    else if (action === "do-reopen-meso") return reopenMeso(true);
     else if (action === "delete-meso") return deleteMeso();
     else if (action === "save-meso-template") return saveMesoTemplate();
     else if (action === "sum-mode") state.ui.summaryMode = d.mode;
@@ -1764,10 +1970,41 @@
 
   function moveList(list, index, dir) {
     const j = index + dir;
-    if (!list || j < 0 || j >= list.length) return;
+    if (!list || j < 0 || j >= list.length) return false;
     const [item] = list.splice(index, 1);
     list.splice(j, 0, item);
+    return true;
+  }
+
+  function offerBoard(next, after) {
+    loadBoard();
+    if (boardIsDirty(state.board)) {
+      state.modal = {
+        type: "confirm",
+        title: "Discard your current draft?",
+        body: "The plan you're building will be replaced.",
+        yes: "do-replace-board",
+        yesLabel: "Discard",
+        pendingBoard: next,
+        pendingAfter: after || ""
+      };
+      render();
+      return;
+    }
+    commitBoard(next, after);
+  }
+
+  function commitBoard(next, after) {
+    state.board = next;
     saveBoard();
+    if (after === "overload") {
+      state.ui.copyDay = 0;
+      state.modal = { type: "overload" };
+      go("#/board");
+      return;
+    }
+    state.modal = null;
+    go("#/board");
   }
 
   function toggleBuilderMuscle(id) {
@@ -1780,16 +2017,13 @@
   }
 
   function startScratch() {
-    state.board = L.blankBoard();
-    saveBoard();
-    go("#/board");
+    offerBoard(L.blankBoard(), "");
   }
 
   function startBlank(days, name) {
-    state.board = L.blankDaysBoard(days, name);
-    state.board.subtitle = "Catalog name only";
-    saveBoard();
-    go("#/board");
+    const board = L.blankDaysBoard(days, name);
+    board.subtitle = "Catalog name only";
+    offerBoard(board, "");
   }
 
   function attachLibraryIds(board) {
@@ -1807,25 +2041,34 @@
   function useTemplate(id) {
     const found = findTemplate(id);
     if (!found || found.kind !== "custom") return;
-    state.board = L.boardFromTemplate(found.tpl);
-    attachLibraryIds(state.board);
-    saveBoard();
-    go("#/board");
+    const board = L.boardFromTemplate(found.tpl);
+    attachLibraryIds(board);
+    offerBoard(board, "");
   }
 
   function doCopy(key, week) {
     const meso = L.findMeso(state.mesos, key);
     if (!meso) return;
-    state.board = L.boardFromMesoWeek(meso, week);
-    state.ui.copyDay = 0;
-    saveBoard();
-    state.modal = { type: "overload" };
-    go("#/board");
+    offerBoard(L.boardFromMesoWeek(meso, week), "overload");
   }
 
-  function builderBuild() {
+  function builderBuild(force) {
     const total = state.builder.emphasize.length + state.builder.grow.length + state.builder.maintain.length;
     if (!total) return flash("Add at least one muscle group.");
+    if (!force) {
+      loadBoard();
+      if (boardIsDirty(state.board)) {
+        state.modal = {
+          type: "confirm",
+          title: "Discard your current draft?",
+          body: "Building a new plan replaces the one you're working on.",
+          yes: "do-builder-anyway",
+          yesLabel: "Discard"
+        };
+        render();
+        return;
+      }
+    } else state.modal = null;
     go("#/plan/builder/working");
     setTimeout(() => {
       state.board = L.builderBoard(state.builder.days, {
@@ -1834,6 +2077,7 @@
         maintain: state.builder.maintain
       }, state.builder.start || "Monday");
       saveBoard();
+      state.modal = null;
       go("#/board");
     }, 500);
   }
@@ -1851,10 +2095,16 @@
 
   function musclesNext() {
     const counts = state.modal.counts || {};
+    const prev = {};
+    (state.modal.items || []).forEach((item) => {
+      if (!prev[item.muscleGroupId]) prev[item.muscleGroupId] = [];
+      prev[item.muscleGroupId].push(item.priority || "grow");
+    });
     const items = [];
     Object.keys(counts).forEach((id) => {
       const n = counts[id];
-      for (let i = 0; i < n; i++) items.push({ muscleGroupId: Number(id), priority: "grow" });
+      const prios = prev[id] || [];
+      for (let i = 0; i < n; i++) items.push({ muscleGroupId: Number(id), priority: prios[i] || prios[0] || "grow" });
     });
     if (!items.length) return flash("Add at least one muscle group.");
     state.modal = { type: "slot-priorities", day: state.modal.day, items: items, counts: counts };
@@ -1895,8 +2145,7 @@
     const lib = state.library.find((ex) => ex.name === chosen.name);
     if (state.modal.mode === "slot") {
       const slot = state.board.days[state.modal.day].slots[state.modal.slot];
-      slot.exerciseName = chosen.name;
-      slot.exerciseId = (lib && lib.exercise_id) || chosen.id || null;
+      L.assignSlotExercise(slot, chosen.name, (lib && lib.exercise_id) || chosen.id || null);
       if (lib) slot.muscleGroupId = slot.muscleGroupId || L.MUSCLE_ID[lib.muscle];
       saveBoard();
     } else if (state.modal.mode === "add") {
@@ -1963,29 +2212,47 @@
     render();
   }
 
-  function confirmCreate() {
-    const name = (state.modal.name || "New meso plan").trim() || "New meso plan";
-    const weeks = state.modal.weeks || 4;
-    const unit = state.modal.unit || "lb";
+  function confirmCreate(confirmed) {
+    const name = (state.modal.createName || state.modal.name || "New meso plan").trim() || "New meso plan";
+    const weeks = state.modal.createWeeks || state.modal.weeks || 4;
+    const unit = state.modal.createUnit || state.modal.unit || "lb";
+    const current = state.mesos.filter((m) => L.isCurrent(m));
+    if (current.length && !confirmed) {
+      const label = current.map((m) => {
+        const pos = L.currentPosition(m);
+        return m.name + " (Week " + (pos.week + 1) + ")";
+      }).join(", ");
+      state.modal = {
+        type: "confirm",
+        title: "End the current mesocycle?",
+        body: "This will end " + label + ". Continue? Deleting the new plan brings it back, and you can reopen a finished plan from its menu.",
+        yes: "do-confirm-create",
+        yesLabel: "Continue",
+        createName: name,
+        createWeeks: weeks,
+        createUnit: unit
+      };
+      render();
+      return;
+    }
     let board = state.board;
+    if (!board) return;
     if (board.targetsIncluded && board.sourceUnit && board.sourceUnit !== unit) board = L.stripTargets(board);
     const now = new Date().toISOString();
-    state.mesos.forEach((meso) => {
-      if (!L.isCurrent(meso)) return;
-      const patch = L.endMesoRecord(meso, now);
-      meso.status = patch.status;
-      meso.finishedAt = patch.finishedAt;
-      persistMeta(meso);
-    });
     const meso = L.createMeso({ name: name, weeks: weeks, unit: unit, board: board, now: now });
+    state.mesos.forEach((old) => {
+      if (!L.isCurrent(old)) return;
+      L.suspendForNewMeso(old, meso.key, now);
+      persistMeta(old);
+    });
     state.overlay.pristine[meso.key] = L.clone(meso);
     state.overlay.newMesos.push(L.clone(meso));
     state.board = null;
-    sessionStorage.removeItem("goong-board");
+    saveBoard();
     state.modal = null;
     applyData();
     scheduleSave();
-    flash(name + " is the current mesocycle.");
+    queueFlash(name + " is the current mesocycle.");
     go("#/today");
   }
 
@@ -2028,7 +2295,7 @@
         exercise: s.exerciseName
       }));
     });
-    state.overlay.customTemplates.push({
+    const updated = upsertCustomTemplate({
       name: name,
       key: L.uid("t"),
       author: "Custom",
@@ -2039,7 +2306,20 @@
     });
     scheduleSave();
     state.modal = null;
-    flash("Saved on this phone.");
+    flash(updated ? "Updated the template on this phone." : "Saved on this phone.");
+  }
+
+  function upsertCustomTemplate(tpl) {
+    const list = state.overlay.customTemplates || [];
+    state.overlay.customTemplates = list;
+    const idx = list.findIndex((t) => L.normName(t.name) === L.normName(tpl.name));
+    if (idx >= 0) {
+      tpl.key = list[idx].key || tpl.key;
+      list[idx] = tpl;
+      return true;
+    }
+    list.push(tpl);
+    return false;
   }
 
   function readGhost(exId) {
@@ -2312,7 +2592,7 @@
   function saveRename() {
     const meso = L.findMeso(state.mesos, state.modal.key);
     const name = (state.modal.name || "").trim();
-    if (!meso || !name) return;
+    if (!meso || !name) return flash("Enter a name.");
     meso.name = name;
     persistMeta(meso);
     state.modal = null;
@@ -2322,6 +2602,9 @@
   function endMeso() {
     const meso = L.findMeso(state.mesos, state.modal.key);
     if (!meso) return;
+    meso.previousStatus = meso.status;
+    meso.previousFinishedAt = meso.finishedAt == null ? null : meso.finishedAt;
+    meso.endedBy = null;
     const patch = L.endMesoRecord(meso, new Date().toISOString());
     meso.status = patch.status;
     meso.finishedAt = patch.finishedAt;
@@ -2331,14 +2614,53 @@
     flash("Mesocycle marked complete.");
   }
 
+  function reopenMeso(confirmed) {
+    const key = state.modal && state.modal.key;
+    const meso = L.findMeso(state.mesos, key);
+    if (!meso) return;
+    const others = state.mesos.filter((m) => m.key !== key && L.isCurrent(m));
+    if (others.length && !confirmed) {
+      state.modal = {
+        type: "confirm",
+        title: "Reopen " + meso.name + "?",
+        body: "This will end " + others.map((m) => m.name).join(", ") + " and make " + meso.name + " the current mesocycle.",
+        yes: "do-reopen-meso",
+        yesLabel: "Reopen",
+        key: key
+      };
+      render();
+      return;
+    }
+    const now = new Date().toISOString();
+    others.forEach((old) => {
+      L.suspendForNewMeso(old, meso.key, now);
+      persistMeta(old);
+    });
+    L.reopenMesoRecord(meso);
+    persistMeta(meso);
+    applyData();
+    state.modal = null;
+    flash(meso.name + " is the current mesocycle.");
+  }
+
   function deleteMeso() {
     const meso = L.findMeso(state.mesos, state.modal.key);
     if (!meso || !meso.local) return;
-    state.overlay.deleted[meso.key] = true;
-    state.overlay.newMesos = state.overlay.newMesos.filter((m) => m.key !== meso.key);
+    const deletedKey = meso.key;
+    let restored = "";
+    state.mesos.forEach((old) => {
+      if (old.key === deletedKey) return;
+      if (L.restoreSuspendedMeso(old, deletedKey)) {
+        persistMeta(old);
+        restored = old.name;
+      }
+    });
+    state.overlay.deleted[deletedKey] = true;
+    state.overlay.newMesos = state.overlay.newMesos.filter((m) => m.key !== deletedKey);
     applyData();
     scheduleSave();
     state.modal = null;
+    queueFlash(restored ? restored + " is the current mesocycle again." : "Mesocycle deleted.");
     go("#/mesos");
   }
 
@@ -2354,7 +2676,7 @@
         exercise: ex.name
       }));
     });
-    state.overlay.customTemplates.push({
+    const updated = upsertCustomTemplate({
       name: meso.name,
       key: L.uid("t"),
       author: "Custom",
@@ -2364,7 +2686,7 @@
     });
     scheduleSave();
     state.modal = null;
-    flash("Template saved on this phone.");
+    flash(updated ? "Updated the template on this phone." : "Template saved on this phone.");
   }
 
   function exportBackup() {

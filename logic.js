@@ -69,7 +69,8 @@
       bodyweights: [],
       customExercises: [],
       customTemplates: [],
-      settings: { autoMatch: true, usePreferred: false, preferredTypes: [] }
+      settings: { autoMatch: true, usePreferred: false, preferredTypes: [] },
+      board: null
     };
   }
 
@@ -139,6 +140,9 @@
         if (meta.finishedAt !== undefined) copy.finishedAt = meta.finishedAt;
         if (meta.notes) copy.notes = clone(meta.notes);
         if (meta.generatedFrom) copy.generatedFrom = meta.generatedFrom;
+        if (meta.endedBy !== undefined) copy.endedBy = meta.endedBy;
+        if (meta.previousStatus !== undefined) copy.previousStatus = meta.previousStatus;
+        if (meta.previousFinishedAt !== undefined) copy.previousFinishedAt = meta.previousFinishedAt;
       }
       copy.weeks.forEach(function (week) {
         week.days.forEach(function (day, i) {
@@ -619,12 +623,10 @@
           }
         }
         if (pick) {
-          slot.exerciseName = pick.name;
-          slot.exerciseId = pick.exercise_id || null;
+          assignSlotExercise(slot, pick.name, pick.exercise_id || null);
           used[normName(pick.name)] = true;
         } else if (replace) {
-          slot.exerciseName = null;
-          slot.exerciseId = null;
+          assignSlotExercise(slot, null, null);
         }
       });
     });
@@ -781,6 +783,45 @@
       status: "complete",
       finishedAt: now || new Date().toISOString()
     };
+  }
+
+  function assignSlotExercise(slot, name, id) {
+    var next = name || null;
+    var changed = normName(slot.exerciseName) !== normName(next);
+    slot.exerciseName = next;
+    slot.exerciseId = id || null;
+    if (changed) slot.sets = [];
+    return changed;
+  }
+
+  function suspendForNewMeso(meso, newKey, now) {
+    meso.previousStatus = meso.status;
+    meso.previousFinishedAt = meso.finishedAt == null ? null : meso.finishedAt;
+    meso.endedBy = newKey;
+    var patch = endMesoRecord(meso, now);
+    meso.status = patch.status;
+    meso.finishedAt = patch.finishedAt;
+    return meso;
+  }
+
+  function restoreSuspendedMeso(meso, deletedKey) {
+    if (!meso || !meso.endedBy) return false;
+    if (deletedKey && meso.endedBy !== deletedKey) return false;
+    meso.status = meso.previousStatus || "ready";
+    meso.finishedAt = meso.previousFinishedAt == null ? null : meso.previousFinishedAt;
+    meso.endedBy = null;
+    meso.previousStatus = null;
+    meso.previousFinishedAt = null;
+    return true;
+  }
+
+  function reopenMesoRecord(meso) {
+    meso.status = "ready";
+    meso.finishedAt = null;
+    meso.endedBy = null;
+    meso.previousStatus = null;
+    meso.previousFinishedAt = null;
+    return meso;
   }
 
   function clearReplacedSetTargets(ex) {
@@ -953,6 +994,10 @@
     boardIssues: boardIssues,
     createMeso: createMeso,
     endMesoRecord: endMesoRecord,
+    assignSlotExercise: assignSlotExercise,
+    suspendForNewMeso: suspendForNewMeso,
+    restoreSuspendedMeso: restoreSuspendedMeso,
+    reopenMesoRecord: reopenMesoRecord,
     clearReplacedSetTargets: clearReplacedSetTargets,
     refreshExerciseStatus: refreshExerciseStatus,
     refreshDayStatus: refreshDayStatus,

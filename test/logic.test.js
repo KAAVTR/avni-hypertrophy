@@ -140,6 +140,55 @@ const kgMeso = Logic.createMeso({ name: "Kg", weeks: 5, unit: "kg", board: kgBoa
 assert.strictEqual(kgMeso.weeks[0].days[0].exercises[0].sets.length, 0, "unit change does not invent converted weights");
 assert.deepStrictEqual(kgMeso.weekRir, [2, 1, 0, 0, 8]);
 
+const squatSlot = Logic.clone(copy.days[0].slots[0]);
+assert.strictEqual(squatSlot.exerciseName, "Barbell Squat (High Bar)");
+assert.ok(squatSlot.sets.length > 0);
+Logic.assignSlotExercise(squatSlot, "Hack Squat", "hack");
+assert.strictEqual(squatSlot.exerciseName, "Hack Squat");
+assert.strictEqual(squatSlot.sets.length, 0, "a different exercise drops the old targets");
+squatSlot.sets = [{ weightTarget: 100, repsTarget: 8 }];
+Logic.assignSlotExercise(squatSlot, "Hack Squat", "hack");
+assert.strictEqual(squatSlot.sets.length, 1, "the same exercise keeps its targets");
+
+const swapped = Logic.clone(copy);
+swapped.days[0].slots[0].exerciseName = "Not a real quad lift";
+Logic.autofillBoard(swapped, library.exercises, mesos, { replace: true, fillEmpty: false });
+assert.notStrictEqual(swapped.days[0].slots[0].exerciseName, "Not a real quad lift");
+assert.strictEqual(swapped.days[0].slots[0].sets.length, 0, "autofill replace clears leftover targets");
+
+const live = Logic.clone(current);
+Logic.suspendForNewMeso(live, "m-new", "2026-10-25T00:00:00.000Z");
+const overlaySuspend = Logic.emptyOverlay();
+overlaySuspend.mesoMeta[current.key] = {
+  status: live.status,
+  finishedAt: live.finishedAt,
+  endedBy: live.endedBy,
+  previousStatus: live.previousStatus,
+  previousFinishedAt: live.previousFinishedAt
+};
+const suspended = Logic.materialize(seed, overlaySuspend);
+const paused = Logic.findMeso(suspended, current.key);
+assert.strictEqual(paused.status, "complete");
+assert.strictEqual(paused.endedBy, "m-new");
+assert.strictEqual(paused.previousStatus, "ready");
+assert.strictEqual(Logic.isEditable(paused), false);
+assert.strictEqual(Logic.historyRows(suspended).length, 705, "suspending a meso does not drop history");
+assert.strictEqual(Logic.restoreSuspendedMeso(paused, "other"), false);
+assert.strictEqual(paused.status, "complete");
+assert.strictEqual(Logic.restoreSuspendedMeso(paused, "m-new"), true);
+assert.strictEqual(paused.status, "ready");
+assert.strictEqual(paused.finishedAt, null);
+assert.strictEqual(paused.endedBy, null);
+assert.strictEqual(Logic.isCurrent(paused), true);
+Logic.reopenMesoRecord(paused);
+assert.strictEqual(Logic.isEditable(paused), true);
+
+const oldShape = Logic.emptyOverlay();
+delete oldShape.board;
+const mergedOld = Object.assign(Logic.emptyOverlay(), oldShape);
+assert.strictEqual(mergedOld.board, null);
+assert.strictEqual(Logic.materialize(seed, oldShape).length, 23);
+
 console.log("logic tests ok", {
   mesos: mesos.length,
   history: rows.length,

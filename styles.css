@@ -42,7 +42,7 @@ img { max-width: 100%; }
   flex: 1;
   width: min(720px, 100%);
   margin: 0 auto;
-  padding: calc(12px + var(--safe-t)) 16px calc(var(--nav) + var(--safe-b) + 20px);
+  padding: calc(12px + var(--safe-t)) 16px calc(var(--nav) + var(--safe-b) + 76px);
 }
 .boot, .error-box { padding: 48px 20px; text-align: center; color: var(--muted); }
 .error-box strong { color: var(--text); display: block; margin-bottom: 8px; }
@@ -68,8 +68,9 @@ h1, .h1 { font-size: 22px; line-height: 1.2; margin: 0; font-weight: 700; }
   background: var(--card);
   color: var(--text);
   border-radius: 12px;
-  min-width: 40px;
-  height: 40px;
+  min-width: 44px;
+  min-height: 44px;
+  height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -84,11 +85,10 @@ h1, .h1 { font-size: 22px; line-height: 1.2; margin: 0; font-weight: 700; }
   left: 0; right: 0; bottom: 0;
   height: calc(var(--nav) + var(--safe-b));
   padding-bottom: var(--safe-b);
-  background: rgba(14, 16, 19, .94);
+  background: var(--bg);
   border-top: 1px solid var(--line);
   display: flex;
   z-index: 20;
-  backdrop-filter: blur(12px);
 }
 .nav a {
   flex: 1;
@@ -173,7 +173,7 @@ h1, .h1 { font-size: 22px; line-height: 1.2; margin: 0; font-weight: 700; }
 .ex-name { font-weight: 700; font-size: 16px; }
 .set-row {
   display: grid;
-  grid-template-columns: 22px 1fr 1fr 42px;
+  grid-template-columns: 22px 1fr 1fr 44px;
   gap: 8px;
   align-items: center;
   margin-top: 8px;
@@ -191,8 +191,8 @@ h1, .h1 { font-size: 22px; line-height: 1.2; margin: 0; font-weight: 700; }
 .field[readonly] { color: var(--muted); }
 label.lbl { display: block; font-size: 12px; color: var(--faint); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 4px; }
 .check {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 12px;
   border: 1px solid var(--line);
   background: var(--bg);
@@ -248,7 +248,9 @@ label.lbl { display: block; font-size: 12px; color: var(--faint); font-weight: 7
   border: 1px solid var(--line);
   background: var(--card);
   border-radius: 999px;
-  padding: 8px 12px;
+  padding: 12px 14px;
+  min-width: 44px;
+  min-height: 44px;
   color: var(--muted);
   white-space: nowrap;
   font-weight: 650;
@@ -266,7 +268,19 @@ label.lbl { display: block; font-size: 12px; color: var(--faint); font-weight: 7
 }
 .btn.primary { background: var(--red); color: white; }
 .btn.danger { background: transparent; color: var(--red-2); }
-.btn.slim { width: auto; padding: 8px 12px; }
+.btn.slim { width: auto; padding: 12px 14px; min-height: 44px; }
+.sticky-cta {
+  position: fixed;
+  z-index: 15;
+  left: 16px;
+  right: 16px;
+  width: auto;
+  max-width: 688px;
+  margin-left: auto;
+  margin-right: auto;
+  bottom: calc(var(--nav) + var(--safe-b) + 8px);
+}
+button.day-col { min-height: 88px; }
 .btn-row { display: flex; gap: 8px; }
 .btn-row .btn { flex: 1; }
 
@@ -310,9 +324,24 @@ label.lbl { display: block; font-size: 12px; color: var(--faint); font-weight: 7
   text-align: left;
   background: transparent;
   border: 0;
-  padding: 4px 0;
+  padding: 12px 0;
+  min-height: 44px;
   color: var(--muted);
   font-weight: 650;
+}
+.slot .choose.filled { color: var(--text); }
+.day-head { flex-wrap: wrap; align-items: center; }
+.day-head .field { min-height: 44px; width: auto; flex: 1; }
+.drag-handle {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .backdrop {
@@ -326,13 +355,30 @@ label.lbl { display: block; font-size: 12px; color: var(--faint); font-weight: 7
 }
 .sheet {
   width: min(640px, 100%);
-  max-height: min(88dvh, 820px);
+  max-height: min(92dvh, 820px);
   overflow: auto;
   background: var(--bg-elev);
   border-radius: 18px 18px 0 0;
-  padding: 16px 16px calc(16px + var(--safe-b));
+  padding: 16px 16px 0;
   box-shadow: var(--shadow);
 }
+.sheet-foot {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  background: var(--bg-elev);
+  border-top: 1px solid var(--line);
+  padding: 10px 0 calc(12px + var(--safe-b));
+  margin-top: 8px;
+}
+.picker-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.picker-row .option { flex: 1; margin-bottom: 0; min-height: 44px; }
+.picker-detail { align-self: center; font-size: 22px; }
 .sheet h2 { margin: 0 0 8px; font-size: 20px; }
 .option {
   width: 100%;
@@ -406,7 +452,8 @@ label.lbl { display: block; font-size: 12px; color: var(--faint); font-weight: 7
   padding: 4px;
 }
 .counter button {
-  width: 32px; height: 32px; border: 0; border-radius: 8px; background: var(--card-2); font-weight: 800;
+  width: 44px; height: 44px; min-width: 44px; min-height: 44px;
+  border: 0; border-radius: 8px; background: var(--card-2); font-weight: 800;
 }
 .lock {
   background: #241c12;
@@ -421,13 +468,17 @@ hr.sep { border: 0; border-top: 1px solid var(--line); margin: 12px 0; }
 .tabs { display: flex; gap: 6px; margin-bottom: 10px; }
 .tabs button { flex: 1; }
 .menu-item {
+  display: block;
   width: 100%;
+  box-sizing: border-box;
   text-align: left;
   background: transparent;
   border: 0;
   border-bottom: 1px solid var(--line);
   padding: 14px 4px;
+  min-height: 44px;
   font-size: 16px;
+  color: inherit;
 }
 .radio {
   width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--faint); flex: 0 0 auto;
