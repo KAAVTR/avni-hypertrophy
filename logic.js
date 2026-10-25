@@ -815,6 +815,55 @@
     return true;
   }
 
+  // Deleting a plan follows the suspension chain and never leaves two current.
+  // A → B → C(current): deleting B restores A only. Deleting A while C is
+  // current retargets whoever A ended so they wait on C, and does not restore them.
+  function releaseOnDelete(mesos, deletedKey) {
+    var deleted = null;
+    var others = [];
+    (mesos || []).forEach(function (m) {
+      if (m && m.key === deletedKey) deleted = m;
+      else others.push(m);
+    });
+    var changed = [];
+    if (!deleted) return { restored: null, changed: changed };
+    if (isCurrent(deleted)) {
+      var patch = endMesoRecord(deleted);
+      deleted.status = patch.status;
+      deleted.finishedAt = patch.finishedAt;
+    }
+    var successor = null;
+    if (deleted.endedBy) {
+      successor = others.filter(function (m) { return m.key === deleted.endedBy; })[0] || null;
+    }
+    var chainContinues = !!(successor && (isCurrent(successor) || successor.endedBy));
+    var otherCurrent = others.some(function (m) { return isCurrent(m); });
+    var waiting = others.filter(function (m) { return m.endedBy === deletedKey; });
+    if (chainContinues) {
+      waiting.forEach(function (m) {
+        m.endedBy = successor.key;
+        changed.push(m);
+      });
+      return { restored: null, changed: changed };
+    }
+    if (otherCurrent || !waiting.length) {
+      if (otherCurrent) {
+        waiting.forEach(function (m) {
+          m.endedBy = null;
+          changed.push(m);
+        });
+      }
+      return { restored: null, changed: changed };
+    }
+    var pick = waiting[0];
+    var restored = restoreSuspendedMeso(pick, deletedKey) ? pick : null;
+    waiting.slice(1).forEach(function (m) {
+      m.endedBy = pick.key;
+      changed.push(m);
+    });
+    return { restored: restored, changed: changed };
+  }
+
   function reopenMesoRecord(meso) {
     meso.status = "ready";
     meso.finishedAt = null;
@@ -997,6 +1046,7 @@
     assignSlotExercise: assignSlotExercise,
     suspendForNewMeso: suspendForNewMeso,
     restoreSuspendedMeso: restoreSuspendedMeso,
+    releaseOnDelete: releaseOnDelete,
     reopenMesoRecord: reopenMesoRecord,
     clearReplacedSetTargets: clearReplacedSetTargets,
     refreshExerciseStatus: refreshExerciseStatus,

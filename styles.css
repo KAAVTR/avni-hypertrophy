@@ -426,7 +426,7 @@ button.day-col { min-height: 88px; }
 .toast {
   position: fixed;
   left: 50%;
-  bottom: calc(var(--nav) + var(--safe-b) + 12px);
+  bottom: calc(var(--nav) + var(--safe-b) + 84px);
   transform: translateX(-50%) translateY(12px);
   background: #f4f6f8;
   color: #111;

@@ -181,6 +181,43 @@ assert.strictEqual(paused.finishedAt, null);
 assert.strictEqual(paused.endedBy, null);
 assert.strictEqual(Logic.isCurrent(paused), true);
 Logic.reopenMesoRecord(paused);
+
+function stubMeso(key, name) {
+  return { key: key, name: name || key, status: "ready", finishedAt: null, endedBy: null, previousStatus: null, previousFinishedAt: null, local: true, weeks: [] };
+}
+function currentKeys(list) {
+  return list.filter((m) => Logic.isCurrent(m)).map((m) => m.key);
+}
+const chainGoong = stubMeso("goong", "Keep it goong");
+const chainA = stubMeso("A", "Chain A");
+const chainB = stubMeso("B", "Chain B");
+Logic.suspendForNewMeso(chainGoong, "A", "2026-10-25T00:00:00.000Z");
+Logic.suspendForNewMeso(chainA, "B", "2026-10-25T00:01:00.000Z");
+const chain = [chainGoong, chainA, chainB];
+const droppedA = Logic.releaseOnDelete(chain, "A");
+assert.strictEqual(droppedA.restored, null);
+assert.strictEqual(chainGoong.endedBy, "B");
+assert.strictEqual(Logic.isCurrent(chainGoong), false);
+assert.deepStrictEqual(currentKeys(chain), ["B"]);
+const alive = [chainGoong, chainB];
+const droppedB = Logic.releaseOnDelete(alive, "B");
+assert.strictEqual(droppedB.restored && droppedB.restored.key, "goong");
+assert.deepStrictEqual(currentKeys(alive), ["goong"]);
+
+const direct = [stubMeso("g"), stubMeso("a")];
+Logic.suspendForNewMeso(direct[0], "a", "2026-10-25T00:00:00.000Z");
+const droppedDirect = Logic.releaseOnDelete(direct, "a");
+assert.strictEqual(droppedDirect.restored && droppedDirect.restored.key, "g");
+assert.deepStrictEqual(currentKeys(direct), ["g"]);
+
+const linked = [stubMeso("g2"), stubMeso("a2"), stubMeso("b2")];
+Logic.suspendForNewMeso(linked[0], "a2", "2026-10-25T00:00:00.000Z");
+Logic.suspendForNewMeso(linked[1], "b2", "2026-10-25T00:01:00.000Z");
+const droppedCurrent = Logic.releaseOnDelete(linked, "b2");
+assert.strictEqual(droppedCurrent.restored && droppedCurrent.restored.key, "a2");
+assert.strictEqual(Logic.isCurrent(linked[0]), false);
+assert.strictEqual(linked[0].endedBy, "a2");
+assert.deepStrictEqual(currentKeys(linked), ["a2"]);
 assert.strictEqual(Logic.isEditable(paused), true);
 
 const oldShape = Logic.emptyOverlay();

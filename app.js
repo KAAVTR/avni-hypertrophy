@@ -411,16 +411,37 @@
         state.ignorePop = false;
         return;
       }
-      if (!state.sheetOnStack) return;
-      state.sheetOnStack = false;
-      state.holdSheet = true;
-      state.modal = null;
-      render();
-      state.holdSheet = false;
+      if (state.sheetOnStack) {
+        state.sheetOnStack = false;
+        state.holdSheet = true;
+        state.modal = null;
+        render();
+        state.holdSheet = false;
+        return;
+      }
+      const samePage = state.routeKey && route().join("/") === state.routeKey;
+      if (samePage && !state.staleHop) {
+        state.staleHop = true;
+        setTimeout(() => {
+          state.staleHop = false;
+          if (route().join("/") !== state.routeKey) return;
+          try { history.back(); }
+          catch (err) { /* already at the start of the session */ }
+        }, 0);
+      }
     });
   }
 
   function render() {
+    if (state.modal && state.modal.type === "confirm") {
+      if (state.confirmModal !== state.modal) {
+        state.confirmModal = state.modal;
+        state.confirmReadyAt = Date.now() + 600;
+      }
+    } else {
+      state.confirmModal = null;
+      state.confirmReadyAt = 0;
+    }
     if (state.pendingFlash) {
       state.toast = state.pendingFlash;
       state.pendingFlash = "";
@@ -1498,8 +1519,19 @@
     return html;
   }
 
+  function confirmYesGate() {
+    const wait = (state.confirmReadyAt || 0) - Date.now();
+    if (wait <= 0) return "";
+    clearTimeout(confirmYesGate.t);
+    confirmYesGate.t = setTimeout(() => {
+      if (Date.now() < (state.confirmReadyAt || 0)) return;
+      document.querySelectorAll("[data-confirm-yes]").forEach((btn) => { btn.style.pointerEvents = ""; });
+    }, wait);
+    return ' data-confirm-yes="1" style="pointer-events:none"';
+  }
+
   function confirmModal() {
-    return "<h2>" + esc(state.modal.title || "Confirm") + '</h2><p class="small">' + esc(state.modal.body || "") + '</p><div class="sheet-foot"><div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="' + esc(state.modal.yes || "close-modal") + '">' + esc(state.modal.yesLabel || "Confirm") + "</button></div></div>";
+    return "<h2>" + esc(state.modal.title || "Confirm") + '</h2><p class="small">' + esc(state.modal.body || "") + '</p><div class="sheet-foot"><div class="btn-row"><button class="btn" data-action="close-modal">Cancel</button><button class="btn primary" data-action="' + esc(state.modal.yes || "close-modal") + '"' + confirmYesGate() + ">" + esc(state.modal.yesLabel || "Confirm") + "</button></div></div>";
   }
 
   function feedbackModal() {
@@ -1783,6 +1815,7 @@
   }
 
   function handle(action, btn) {
+    if (state.modal && state.modal.type === "confirm" && action === state.modal.yes && Date.now() < (state.confirmReadyAt || 0)) return;
     const d = btn.dataset;
     if (action === "calendar") state.modal = { type: "calendar", key: d.key };
     else if (action === "workout-menu") state.modal = { type: "workout-menu", key: d.key, week: Number(d.week), day: Number(d.day) };
@@ -2647,14 +2680,10 @@
     const meso = L.findMeso(state.mesos, state.modal.key);
     if (!meso || !meso.local) return;
     const deletedKey = meso.key;
-    let restored = "";
-    state.mesos.forEach((old) => {
-      if (old.key === deletedKey) return;
-      if (L.restoreSuspendedMeso(old, deletedKey)) {
-        persistMeta(old);
-        restored = old.name;
-      }
-    });
+    const released = L.releaseOnDelete(state.mesos, deletedKey);
+    if (released.restored) persistMeta(released.restored);
+    (released.changed || []).forEach((old) => persistMeta(old));
+    const restored = released.restored ? released.restored.name : "";
     state.overlay.deleted[deletedKey] = true;
     state.overlay.newMesos = state.overlay.newMesos.filter((m) => m.key !== deletedKey);
     applyData();
