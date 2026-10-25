@@ -794,6 +794,23 @@
     return changed;
   }
 
+  // If a bad save left several plans current, keep the newest and suspend the rest.
+  // Workouts stay on the suspended plans; Reopen can bring one back.
+  function suspendExtras(mesos, now) {
+    var currents = (mesos || []).filter(isCurrent);
+    if (currents.length < 2) return [];
+    currents.sort(function (a, b) {
+      var byDate = String(b.createdAt || "").localeCompare(String(a.createdAt || ""));
+      if (byDate) return byDate;
+      return String(b.key || "").localeCompare(String(a.key || ""));
+    });
+    var keep = currents[0];
+    var extras = currents.slice(1);
+    var stamp = now || new Date().toISOString();
+    extras.forEach(function (old) { suspendForNewMeso(old, keep.key, stamp); });
+    return extras;
+  }
+
   function suspendForNewMeso(meso, newKey, now) {
     meso.previousStatus = meso.status;
     meso.previousFinishedAt = meso.finishedAt == null ? null : meso.finishedAt;
@@ -1045,6 +1062,7 @@
     endMesoRecord: endMesoRecord,
     assignSlotExercise: assignSlotExercise,
     suspendForNewMeso: suspendForNewMeso,
+    suspendExtras: suspendExtras,
     restoreSuspendedMeso: restoreSuspendedMeso,
     releaseOnDelete: releaseOnDelete,
     reopenMesoRecord: reopenMesoRecord,

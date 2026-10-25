@@ -220,6 +220,22 @@ assert.strictEqual(linked[0].endedBy, "a2");
 assert.deepStrictEqual(currentKeys(linked), ["a2"]);
 assert.strictEqual(Logic.isEditable(paused), true);
 
+const olderCurrent = stubMeso("old", "Keep it goong");
+olderCurrent.createdAt = "2026-09-14T14:31:18.416Z";
+const newerCurrent = stubMeso("new", "Chain B");
+newerCurrent.createdAt = "2026-10-25T18:00:00.000Z";
+const finishedCurrent = stubMeso("done", "Finished");
+finishedCurrent.status = "complete";
+finishedCurrent.finishedAt = "2026-08-01T00:00:00.000Z";
+const repaired = Logic.suspendExtras([olderCurrent, newerCurrent, finishedCurrent]);
+assert.strictEqual(repaired.length, 1);
+assert.strictEqual(repaired[0].key, "old");
+assert.strictEqual(Logic.isCurrent(olderCurrent), false);
+assert.strictEqual(olderCurrent.endedBy, "new");
+assert.strictEqual(olderCurrent.status, "complete");
+assert.strictEqual(Logic.isCurrent(newerCurrent), true);
+assert.strictEqual(Logic.suspendExtras([newerCurrent]).length, 0);
+
 const oldShape = Logic.emptyOverlay();
 delete oldShape.board;
 const mergedOld = Object.assign(Logic.emptyOverlay(), oldShape);

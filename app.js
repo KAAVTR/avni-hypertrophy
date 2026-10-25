@@ -81,6 +81,7 @@
       state.sheetOnStack = false;
       state.holdSheet = true;
       state.ignorePop = true;
+      clearSheetFlag();
       const after = () => {
         window.removeEventListener("popstate", after);
         state.ignorePop = false;
@@ -193,6 +194,11 @@
   function applyData() {
     state.library = L.libraryWithCustom(state.libraryRaw, state.overlay.customExercises);
     state.mesos = L.materialize(state.seed, state.overlay);
+    const extras = L.suspendExtras(state.mesos);
+    if (extras.length) {
+      extras.forEach(persistMeta);
+      state.mesos = L.materialize(state.seed, state.overlay);
+    }
     rebuildIndex();
   }
 
@@ -376,9 +382,34 @@
     navigator.serviceWorker.register(asset("sw.js")).catch(() => {});
   }
 
+  const SHEET_FLAG = "avni-hyp-sheet";
+
+  function markSheetFlag() {
+    try { sessionStorage.setItem(SHEET_FLAG, "1"); } catch (err) { /* private mode */ }
+  }
+
+  function clearSheetFlag() {
+    try { sessionStorage.removeItem(SHEET_FLAG); } catch (err) { /* private mode */ }
+  }
+
+  function sheetFlagSet() {
+    try { return sessionStorage.getItem(SHEET_FLAG) === "1"; } catch (err) { return false; }
+  }
+
   function paint() {
     bindOnce();
     render();
+    dropReloadedSheet();
+  }
+
+  function dropReloadedSheet() {
+    if (state.droppedSheet) return;
+    state.droppedSheet = true;
+    if (!sheetFlagSet()) return;
+    clearSheetFlag();
+    state.ignorePop = true;
+    try { history.back(); }
+    catch (err) { state.ignorePop = false; }
   }
 
   let bound = false;
@@ -412,22 +443,12 @@
         return;
       }
       if (state.sheetOnStack) {
+        clearSheetFlag();
         state.sheetOnStack = false;
         state.holdSheet = true;
         state.modal = null;
         render();
         state.holdSheet = false;
-        return;
-      }
-      const samePage = state.routeKey && route().join("/") === state.routeKey;
-      if (samePage && !state.staleHop) {
-        state.staleHop = true;
-        setTimeout(() => {
-          state.staleHop = false;
-          if (route().join("/") !== state.routeKey) return;
-          try { history.back(); }
-          catch (err) { /* already at the start of the session */ }
-        }, 0);
       }
     });
   }
@@ -478,16 +499,41 @@
       const t = $("#toast");
       if (t) t.classList.add("show");
     }
+    placeToast();
     if (state.modal && !state.sheetOnStack && !state.holdSheet) {
       state.sheetOnStack = true;
-      try { history.pushState({ hypSheet: 1 }, ""); }
-      catch (err) { state.sheetOnStack = false; }
+      try {
+        history.pushState({ hypSheet: 1 }, "");
+        markSheetFlag();
+      } catch (err) { state.sheetOnStack = false; }
     } else if (!state.modal && state.sheetOnStack && !state.holdSheet) {
       state.sheetOnStack = false;
       state.ignorePop = true;
+      clearSheetFlag();
       try { history.back(); }
       catch (err) { state.ignorePop = false; }
     }
+  }
+
+  function hashRoute(hash) {
+    return String(hash || "").replace(/^#/, "").split("?")[0].split("/").filter(Boolean).join("/");
+  }
+
+  function placeToast() {
+    const toast = $("#toast");
+    if (!toast) return;
+    const gap = 12;
+    let ceiling = window.innerHeight;
+    document.querySelectorAll(".sheet-foot, .sticky-cta, .nav").forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.width < 2 || r.height < 2) return;
+      if (r.top > 0 && r.top < ceiling) ceiling = r.top;
+    });
+    const h = toast.offsetHeight || 40;
+    let top = Math.round(ceiling - gap - h);
+    if (top < 8) top = 8;
+    toast.style.top = top + "px";
+    toast.style.bottom = "auto";
   }
 
   function shell(body) {
@@ -1623,6 +1669,15 @@
 
   function onClick(e) {
     const link = e.target.closest("a[href]");
+    if (link) {
+      const raw = link.getAttribute("href") || "";
+      const hashAt = raw.indexOf("#/");
+      const bare = !(link.dataset && link.dataset.action);
+      if (bare && hashAt >= 0 && hashRoute(raw.slice(hashAt)) === route().join("/")) {
+        e.preventDefault();
+        return;
+      }
+    }
     if (link && state.sheetOnStack && state.modal && !(link.dataset && link.dataset.action)) {
       const raw = link.getAttribute("href") || "";
       const i = raw.indexOf("#/");
