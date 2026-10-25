@@ -1,0 +1,93 @@
+{
+ "unit": "lb",
+ "entries": [
+  {
+   "date": "2024-09-29",
+   "bodyweight": 196.4
+  },
+  {
+   "date": "2024-11-19",
+   "bodyweight": 197
+  },
+  {
+   "date": "2025-01-01",
+   "bodyweight": 200
+  },
+  {
+   "date": "2025-01-10",
+   "bodyweight": 197
+  },
+  {
+   "date": "2025-02-08",
+   "bodyweight": 195
+  },
+  {
+   "date": "2025-02-18",
+   "bodyweight": 197
+  },
+  {
+   "date": "2025-03-04",
+   "bodyweight": 198
+  },
+  {
+   "date": "2025-03-22",
+   "bodyweight": 200
+  },
+  {
+   "date": "2025-03-23",
+   "bodyweight": 197
+  },
+  {
+   "date": "2025-04-08",
+   "bodyweight": 196
+  },
+  {
+   "date": "2025-05-28",
+   "bodyweight": 195
+  },
+  {
+   "date": "2025-06-17",
+   "bodyweight": 195
+  },
+  {
+   "date": "2025-06-21",
+   "bodyweight": 200
+  },
+  {
+   "date": "2025-06-23",
+   "bodyweight": 200
+  },
+  {
+   "date": "2025-08-04",
+   "bodyweight": 200
+  },
+  {
+   "date": "2025-09-15",
+   "bodyweight": 200
+  },
+  {
+   "date": "2026-01-08",
+   "bodyweight": 200
+  },
+  {
+   "date": "2026-01-12",
+   "bodyweight": 200
+  },
+  {
+   "date": "2026-02-26",
+   "bodyweight": 195
+  },
+  {
+   "date": "2026-03-17",
+   "bodyweight": 195
+  },
+  {
+   "date": "2026-06-27",
+   "bodyweight": 192
+  },
+  {
+   "date": "2026-07-27",
+   "bodyweight": 195
+  }
+ ]
+}
